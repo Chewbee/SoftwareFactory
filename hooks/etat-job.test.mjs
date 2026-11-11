@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { execFileSync, spawn } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { setTimeout as attendre } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
@@ -12,6 +12,7 @@ import {
   cheminsBranche,
   corpsCommentaire,
   DELAI_VERROU_PERIME_MS,
+  DEPOT,
   envPublieur,
   ErreurEtatJob,
   extraireIdCreation,
@@ -19,6 +20,7 @@ import {
   lancerDetache,
   lienSuivant,
   lireCorpsCommentaire,
+  lireDepot,
   lireMetadonnees,
   nomFichierBranche,
   normaliserEvenement,
@@ -1477,4 +1479,48 @@ test("hooks.json déclare etat-job en PostToolUse TaskCreate|TaskUpdate, timeout
   assert.deepEqual(entrees[0].hooks, [
     { type: "command", command: 'node "${CLAUDE_PLUGIN_ROOT}/hooks/etat-job.mjs"', timeout: 10 },
   ]);
+});
+
+// --- SF-37 : le dépôt de publication vient du projet consommateur (ETAT_JOB_DEPOT) ---
+const CHEMIN_COEUR = path.join(ICI, "etat-job-core.mjs");
+const importCoeur = `import(${JSON.stringify(pathToFileURL(CHEMIN_COEUR).href)})`;
+
+test("lireDepot : défaut Chewbee/Adonnante quand l'env est absent ou vide", () => {
+  assert.equal(lireDepot({}), "Chewbee/Adonnante");
+  assert.equal(lireDepot({ ETAT_JOB_DEPOT: "   " }), "Chewbee/Adonnante");
+  assert.equal(lireDepot(undefined), "Chewbee/Adonnante");
+});
+
+test("lireDepot : la valeur du projet consommateur fait foi", () => {
+  assert.equal(lireDepot({ ETAT_JOB_DEPOT: "Chewbee/sf-recette" }), "Chewbee/sf-recette");
+});
+
+test("lireDepot : valeur mal formée → échec franc, jamais de dépôt deviné", () => {
+  for (const mauvaise of ["sans-slash", "a/b/c", "owner/", "/repo"]) {
+    assert.throws(() => lireDepot({ ETAT_JOB_DEPOT: mauvaise }), /ETAT_JOB_DEPOT/, mauvaise);
+  }
+});
+
+test("DEPOT vaut le défaut quand l'environnement du test ne le pose pas", () => {
+  assert.equal(DEPOT, "Chewbee/Adonnante");
+});
+
+test("un processus fils avec ETAT_JOB_DEPOT résout DEPOT vers le dépôt du consommateur", async () => {
+  const r = spawnSync(process.execPath, ["--input-type=module", "-e",
+    `const m = await ${importCoeur}; console.log(m.DEPOT);`], {
+    encoding: "utf8",
+    env: { PATH: process.env.PATH ?? "", ETAT_JOB_DEPOT: "Chewbee/sf-recette" },
+  });
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(r.stdout.trim(), "Chewbee/sf-recette");
+});
+
+test("un processus fils avec ETAT_JOB_DEPOT mal formée échoue en nommant la variable", () => {
+  const r = spawnSync(process.execPath, ["--input-type=module", "-e",
+    `const m = await ${importCoeur}; console.log(m.DEPOT);`], {
+    encoding: "utf8",
+    env: { PATH: process.env.PATH ?? "", ETAT_JOB_DEPOT: "tout-casse" },
+  });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /ETAT_JOB_DEPOT/);
 });
