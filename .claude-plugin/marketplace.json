@@ -1,0 +1,24 @@
+{
+  "name": "softwarefactory-marketplace",
+  "description": "Marketplace de l'usine Chewbee : le plugin softwarefactory et les plugins tiers qu'il absorbe (référencés, pas forkés)",
+  "owner": { "name": "Chewbee", "url": "https://github.com/Chewbee" },
+  "plugins": [
+    {
+      "name": "softwarefactory",
+      "description": "Usine d'agents Chewbee : skills, agents, hooks, conventions",
+      "version": "0.1.0",
+      "source": "./",
+      "author": { "name": "Chewbee", "url": "https://github.com/Chewbee" }
+    },
+    {
+      "name": "superpowers-extended-cc",
+      "description": "Skills d'étape pour agents (upstream pcvelz, référencé)",
+      "source": { "source": "github", "repo": "pcvelz/superpowers" }
+    },
+    {
+      "name": "cesiumjs-skills",
+      "description": "Skills CesiumJS (upstream CesiumGS, référencé)",
+      "source": { "source": "github", "repo": "CesiumGS/cesiumjs-skills" }
+    }
+  ]
+}

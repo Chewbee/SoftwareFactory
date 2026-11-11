@@ -1,0 +1,9 @@
+{
+  "name": "softwarefactory",
+  "description": "Usine d'agents (skills, agents, hooks, conventions) de Chewbee, consommée par ses projets",
+  "version": "0.1.0",
+  "author": { "name": "Chewbee", "url": "https://github.com/Chewbee" },
+  "homepage": "https://github.com/Chewbee/SoftwareFactory",
+  "repository": "https://github.com/Chewbee/SoftwareFactory",
+  "license": "MIT"
+}

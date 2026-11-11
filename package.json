@@ -1,0 +1,9 @@
+{
+  "name": "softwarefactory",
+  "private": true,
+  "type": "module",
+  "description": "Usine d'agents Claude Code de Chewbee — plugin + marketplace",
+  "scripts": {
+    "test": "node --test"
+  }
+}
