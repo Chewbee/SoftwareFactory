@@ -1,0 +1,51 @@
+name: CI
+
+# T8 du plan d'extraction (SF-12) : deux jobs, zéro dépendance npm — le dépôt
+# n'a pas de node_modules à installer. `manifeste` passe par la CLI Claude
+# Code en repli npx (aucun précédent d'installation chez Adonnante, le dépôt
+# est le premier à la demander).
+on:
+  pull_request:
+    branches: [master, dev]
+  push:
+    branches: [dev]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - name: Tests (node --test, sans install — zéro dépendance)
+        run: node --test tests/*.test.mjs hooks/*.test.mjs
+
+  manifeste:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      # Validation statique des manifestes plugin + marketplace ; les deux
+      # avertissements attendus (CLAUDE.md racine non chargé, icône absente)
+      # ne sont pas des échecs.
+      - name: claude plugin validate
+        run: npx -y @anthropic-ai/claude-code@latest plugin validate .
