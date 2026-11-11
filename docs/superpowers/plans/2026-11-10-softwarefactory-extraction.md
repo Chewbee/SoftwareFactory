@@ -34,7 +34,7 @@ Base d'analyse : `origin/dev` 3d1812c3. Échantillons de formats recopiés : `~/
 - **TDD.** Toute logique nouvelle : test rouge cité, puis vert. Tests et builds au premier plan, délai 600 000 ms, sur un `CARGO_TARGET_DIR` déjà chaud (sans objet ici : zéro Rust).
 - **Code (`.claude/rules/js-ts.md`).** ESM, aucun `default export`, aucun `as`, aucun `eslint-disable` ; `String(n)` en gabarit pour un nombre/booléen ; zéro avertissement eslint nouveau.
 - **Repli.** Jamais de repli silencieux : tout échec d'usine (plugin introuvable, clé absente) est journalisé et signalé.
-- **Commits.** Charte `redaction-pr-issues` : titre à l'impératif avec préfixe Conventional Commits, corps qui prouve, référence #2601, aucune ligne `Co-Authored-By`, jamais `--no-verify`.
+- **Commits.** Charte `redaction-pr-issues` : titre à l'impératif avec préfixe Conventional Commits, corps qui prouve, footer Linear `Refs SF-N` / `Fixes SF-N` (règle « Traçabilité git » de `docs/backlog-linear.md` ; l'issue `Chewbee/Adonnante#2601` reste le suivi de l'extraction côté Adonnante et reçoit les preuves en commentaires), aucune ligne `Co-Authored-By`, jamais `--no-verify`.
 - **Relecture.** Chaque PR SF est relue par `softwarefactory:relecteur` (model `opus`) distinct de l'implémenteur, diff depuis la merge-base. `VERDICT : PRÊT` avant ouverture (règle d'ouverture ; auto-merge Adonnante seulement après UAT).
 - **Windows.** Les hooks d'événement sont vérifiés à l'exécution réelle (wrapper `.cmd` du patron superpowers-extended-cc si nécessaire, constaté en tâche 3, pas présumé).
 - **Manifestes.** Avant tout commit de manifeste, vérifier la forme des sources externes sur la doc marketplace (`code.claude.com/docs/en/plugins/marketplace-reference`) et passer `claude plugin validate` (échantillon réel : `~/.claude/plugins/marketplaces/superpowers-extended-cc-marketplace/.claude-plugin/marketplace.json`). Si l'absorption d'un plugin externe dans `marketplace.json` n'est pas supportée, repli assumé : adoption à 3 entrées `extraKnownMarketplaces` (retour tranché sur recette, signalé sur #2601).
@@ -121,7 +121,7 @@ gh repo edit Chewbee/SoftwareFactory --default-branch dev
 
 ### Task 2 : Agents, skills, NOTICE migrés
 
-**Exécutant :** `executant-basic` (haiku). **Branche :** `feat/2601-contenus` (SF) → PR `dev`. **Dépend de :** T1.
+**Exécutant :** `executant-basic` (haiku). **Branche :** `feat/SF-14-contenus-migres` (SF) → PR `dev`. **Dépend de :** T1.
 
 **Files:** Create (SF) : `agents/analyste.md`, `agents/implementeur.md`, `agents/relecteur.md`, `agents/relecteur-basic.md`, `agents/executant-basic.md`, `agents/typesafe-explorateur.md`, `skills/<9>` + `skills/NOTICE-skills-compte.md` (adaptée), `skills/redaction-pr-issues/SKILL.md` (rewritée).
 
@@ -136,7 +136,7 @@ for s in technical-writing writing-design-docs reviewing-technical-prose recordi
 ```
 
 - [ ] **Step 2 : adapter les frontmatter des agents.** Le champ `skills:` de chaque `agents/*.md` cite ses skills : préfixer chaque référence au plugin par `softwarefactory:` (ex. `technical-writing` → `softwarefactory:technical-writing`) et laisser les skills du plugin officiel `typesafe:typesafe-ai` tels quels. `model` conservé (analyste/relecteur `opus`, etc.).
-- [ ] **Step 3 : réécrire `redaction-pr-issues`.** Remplacer « de ce dépôt » par « du dépôt courant » (titre et description) ; le reste inchangé.
+- [ ] **Step 3 : réécrire `redaction-pr-issues`.** Remplacer « de ce dépôt » par « du dépôt courant » (titre et description) ; le reste inchangé, sauf la neutralisation des références d'issues historiques du dépôt source (ex. #1253, #1185) et de « `CLAUDE.md` » → « son noyau ».
 - [ ] **Step 4 : réécrire `routine-bug-fix` et `routine-feature` (liaisons projet).** Zéro mention d'Adonnante / `dev` / labels en dur : les chaînes citent « le projet consommateur » et renvoient au noyau du projet pour les liaisons (label de tri, branche d'intégration, recette), avec une table `Liaison | Défaut | Où la trancher` en tête de chaque SKILL.md.
 - [ ] **Step 5 : NOTICE.** `cp "$AD/skills/NOTICE-skills-compte.md" skills/` puis mettre à jour : les chemins sources restent, les mentions « sessions cloud ne chargent que .claude/skills/ » sont réécrites pour le plugin.
 - [ ] **Step 6 : test-garde SF.** Adapter `agents-skills-preload.test.mjs` au layout plugin : tests qui parcourent `agents/*.md`, extraient `skills:`, exigent chaque préfixe `softwarefactory:` résolu dans `skills/` (sauf préfixes tiers déclarés `plugin:`). Test : `tests/agents-skills-preload.test.mjs`. Rouge d'abord : lancer et constater l'échec sur les références non préfixées, le citer. Puis corriger les frontmatter jusqu'au vert.
@@ -146,7 +146,7 @@ for s in technical-writing writing-design-docs reviewing-technical-prose recordi
 
 ### Task 3 : Hooks, câblage, gardes
 
-**Exécutant :** `implementeur` (sonnet). **Branche :** même PR que T2 ou `feat/2601-hooks` (SF) → PR `dev`. **Dépend de :** T2.
+**Exécutant :** `implementeur` (sonnet). **Branche :** même PR que T2 ou `feat/SF-16-hooks-generiques` (SF) → PR `dev`. **Dépend de :** T2.
 
 **Files:** Create (SF) : `hooks/*.mjs` (hooks + cores + tests migrés), `hooks/hooks.json`, `hooks/run-hook.cmd` (si constaté nécessaire). Modify : `.claude-plugin/plugin.json` (rien, composants auto-découverts), `package.json` (script `test` déjà bon).
 
@@ -172,7 +172,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 
 ### Task 4 : `plugin-a-jour` paramétrable
 
-**Exécutant :** `implementeur` (sonnet). **Branche :** `feat/2601-plugins-a-jour` (SF) → PR `dev`. **Dépend de :** T3.
+**Exécutant :** `implementeur` (sonnet). **Branche :** `feat/SF-18-plugins-a-jour` (SF) → PR `dev`. **Dépend de :** T3.
 
 **Files:** Modify : `hooks/plugin-a-jour-core.mjs` (lecture projet), `hooks/plugin-a-jour.test.mjs` (+ 3 tests). Test : `hooks/plugin-a-jour.test.mjs`.
 
@@ -213,7 +213,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 
 ### Task 7 : Docs de l'usine
 
-**Exécutant :** `executant-basic` (haiku). **Branche :** `docs/2601-usine-docs` (SF) → PR `dev`. **Dépend de :** T2 (redaction-pr-issues chargée pour la rédaction).
+**Exécutant :** `executant-basic` (haiku). **Branche :** `docs/SF-20-docs-usine` (SF) → PR `dev`. **Dépend de :** T2 (redaction-pr-issues chargée pour la rédaction).
 
 **Files:** Create (SF) : `docs/adoption.md`, `docs/harnais.md`, `docs/issue-tracker.md`, `docs/triage-labels.md`.
 
@@ -226,7 +226,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 
 ### Task 8 : CI de SoftwareFactory sur les runners Hetzner
 
-**Exécutant :** `implementeur` (sonnet, **confiance Jev 0,26 — à trancher** : si un doute d'approche apparaît, arrêter sur #2601 et passer `jev-cli choix` avec les options ; décision utilisateur sur AskUserQuestion sous 0,5). **Branche :** `chore/2601-ci` (SF) → PR `dev`. **Dépend de :** T3 (tests verts), T6.
+**Exécutant :** `implementeur` (sonnet, **confiance Jev 0,26 — à trancher** : si un doute d'approche apparaît, arrêter sur #2601 et passer `jev-cli choix` avec les options ; décision utilisateur sur AskUserQuestion sous 0,5). **Branche :** `chore/SF-12-ci` (SF) → PR `dev`. **Dépend de :** T3 (tests verts), T6.
 
 **Files:** Create (SF) : `.github/workflows/ci.yml`. Ops (hors dépôt) : inscription des runners.
 

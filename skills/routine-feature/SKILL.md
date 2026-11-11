@@ -20,6 +20,8 @@ Cette skill est harnais-neutre et projet-neutre ; le noyau du projet consommateu
 | Suite de contrôles | celle du projet (ex. Adonnante : `pnpm test`, `pnpm type-check`, `pnpm lint`, `cargo test --workspace`) | noyau, section Commandes |
 | UAT visuelle | recette du projet (ex. Adonnante : `pnpm recette`, ou recette navigateur sans desktop) | noyau, section Rendu |
 | Backlog miroir | features Linear si le projet adopte le pilotage Linear (`docs/pilotage-github-linear.md` de SoftwareFactory) ; sinon GitHub Issues | noyau du projet |
+| Labels de feature | ex. Adonnante : `enhancement` ou `feature` | convention de triage du projet |
+| Labels d'écart | ex. `needs-info`, `wontfix`, `ready-for-human` | convention de triage du projet |
 | Journal | ex. Adonnante : `docs/06-agents/journal/AAAA-MM-JJ/<branche>.md` | convention du projet |
 
 > **Routine interactive.** Le cadrage pose des questions : l'utilisateur est
@@ -56,8 +58,8 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
 2. **Bugs d'abord** : `bugs=$(scan "labels=bug" '.') || exit 1`. S'il en
    existe, le dire et demander : passer à `softwarefactory:routine-bug-fix`,
    ou continuer les features.
-3. **Candidates** : les labels de feature du projet (Adonnante :
-   `enhancement` ou `feature`). Un appel par label, car `labels=a,b` vaut ET.
+3. **Candidates** : les labels de feature de la liaison ci-dessus. Un appel par
+   label, car `labels=a,b` vaut ET.
    Stocker avant de trier, pour garder le code d'échec :
 
    ```bash
@@ -69,8 +71,9 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
    Sans `gh` : outils MCP GitHub (`list_issues`, `state: OPEN`), un appel par
    label, toutes les pages, même filtre. Avec le pilotage Linear : lire les
    features ouvertes de la team du projet par l'API/MCP Linear, même tri.
-4. **Écarter** : `needs-info`, `wontfix`, `ready-for-human` ; epic (une epic
-   se traite par ses sous-issues) ; issue déjà couverte par une PR ouverte ou
+4. **Écarter** : les labels d'écart de la liaison ci-dessus (leur convention
+   est documentée dans `docs/triage-labels.md`) ; epic (une epic se traite
+   par ses sous-issues) ; issue déjà couverte par une PR ouverte ou
    une branche `feat/*` vivante (chercher son numéro dans les PR ouvertes) ;
    issue déjà livrée dans la branche d'intégration distante (la commenter,
    ne pas coder).
