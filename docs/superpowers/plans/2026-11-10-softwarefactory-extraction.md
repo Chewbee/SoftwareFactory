@@ -63,7 +63,7 @@ Base d'analyse : `origin/dev` 3d1812c3. Échantillons de formats recopiés : `~/
 - [ ] **Step 1 : créer le dépôt.**
 
 ```bash
-gh repo create Chewbee/SoftwareFactory --private --confirm --description "Usine d'agents Claude Code de Chewbee : skills, agents, hooks, conventions (#2601)"
+gh repo create Chewbee/SoftwareFactory --private --confirm --description "Usine d'agents Claude Code : skills, agents, hooks et conventions, consommée par ses projets (Chewbee/Adonnante#2601)"
 git clone https://github.com/Chewbee/SoftwareFactory.git C:/Users/gh/dev/SoftwareFactory
 cd C:/Users/gh/dev/SoftwareFactory
 git checkout -b dev && git push -u origin dev
@@ -246,7 +246,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 - [ ] **Step 1 : créer le projet d'essai.**
 
 ```bash
-gh repo create Chewbee/sf-recette --private --description "Recette de consommation de SoftwareFactory (#2601)"
+gh repo create Chewbee/sf-recette --private --description "Recette de consommation de SoftwareFactory (Chewbee/Adonnante#2601)"
 git clone https://github.com/Chewbee/sf-recette.git C:/Users/gh/dev/sf-recette && cd C:/Users/gh/dev/sf-recette
 git checkout -b dev && git push -u origin dev && gh repo edit Chewbee/sf-recette --default-branch dev
 ```

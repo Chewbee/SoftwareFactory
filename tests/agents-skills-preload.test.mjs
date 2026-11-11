@@ -79,7 +79,7 @@ test("chaque entrée skills: d'un agent est namespacée, préfixe connu, et rés
     // connaît pas : le signaler plutôt que l'ignorer en silence.
     let clé = null;
     for (const l of lignes.slice(0, finEntete)) {
-      const k = l.match(/^([A-Za-z][A-Za-z-]*):/);
+      const k = l.match(/^\s*([A-Za-z][A-Za-z-]*):/);
       if (k) {
         clé = k[1];
       } else if (/^\s*-\s/.test(l) && clé !== "skills") {

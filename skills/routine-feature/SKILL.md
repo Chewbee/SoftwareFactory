@@ -68,6 +68,7 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
    ```bash
    a=$(scan "labels=enhancement" '.') || exit 1
    b=$(scan "labels=feature" '.') || exit 1
+   # labels de feature de la table des liaisons : un appel par label
    printf '%s\n%s\n' "$a" "$b" | sed '/^$/d' | sort -u -k1,1n | sort -t$'\t' -k2,2
    ```
 

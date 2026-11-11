@@ -25,7 +25,7 @@
     {
       "id": 3,
       "subject": "Task 3: Hooks, câblage, gardes",
-      "status": "pending",
+      "status": "in_progress",
       "branche": "feat/SF-16-hooks-generiques (SF)",
       "issue": 2601,
       "modelTier": "standard",
