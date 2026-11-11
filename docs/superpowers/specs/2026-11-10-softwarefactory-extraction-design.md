@@ -39,6 +39,7 @@ verdicts de relecture, décisions de l'agent principal).
 | D10 | Jev fait partie de l'usine. | Retouches : « JEV fait partie de la factory » |
 | D11 | CI de l'usine calquée sur celle d'Adonnante : runners hébergés dans le cloud, Hetzner pour commencer (même flotte que Adonnante), changeable plus tard. | Retouches : « la CI est comme dans adonnante avec des runners hostés dans le cloud (prenons hetzner comme adonnante on pourra changer plus tard) » |
 | D12 | Périmètre skills : toute skill qui aide à coder, debugger, tester, spécifier, illustrer, écrire correctement part à la SF ; ce qui est langage ou framework reste projet. | Retouches : « toutes les skills qui aide a coder , debugger , tester , specifier , iluuster , ecrire correctemtn vont dans la software factory … ce qui est langage , framework , non c est du projet » |
+| D13 | Le pilotage GitHub + Linear (features Linear team SF, bugs GitHub, synchro bidirectionnelle, traçabilité branches/PR/commits) est un **composant de l'usine** — opéré, documenté (`docs/pilotage-github-linear.md`), suivi dans l'EPIC C4 (SF-33..36), reproductible par projet consommateur. Cycle prouvé le 2026-11-11 : liaison `Refs SF-9` lue par l'API, `Fixes SF-10/11` au merge → miroirs fermés. | Session du 2026-11-11 : « ce setup Github + linear est maintenant un composant de la softwareFactory » |
 
 ## Ce qui migre, ce qui reste
 
@@ -120,7 +121,10 @@ SoftwareFactory/
 │   ├── triage-labels.md
 │   ├── harnais.md         # charte de portabilité (D7) : contenu neutre,
 │   │                      # adaptateurs par harnais, Claude Code v1
-│   └── adoption.md        # comment un projet adopte l'usine
+│   ├── adoption.md        # comment un projet adopte l'usine
+│   ├── backlog-linear.md  # conventions Linear/GitHub (D13)
+│   └── pilotage-github-linear.md  # composant pilotage : setup, preuve,
+                                  # recette de reproduction (D13, EPIC C4)
 ├── tests/                 # si besoin de tests transverses (le reste vit avec
 │                          # les hooks), exécutés par `node --test`
 ├── CLAUDE.md              # développement de l'usine SEULEMENT (dogfooding)
