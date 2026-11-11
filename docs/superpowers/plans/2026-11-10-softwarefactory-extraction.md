@@ -24,7 +24,10 @@ Base d'analyse : `origin/dev` 3d1812c3. Échantillons de formats recopiés : `~/
 
 ## Global Constraints
 
-- **Issue.** Toute tâche référence #2601. `branche` ci-dessous par tâche.
+- **Issue.** Les commits du dépôt SF référencent l'issue Linear de leur
+  feature (`Refs SF-N` / `Fixes SF-N`, charte `docs/backlog-linear.md`) ;
+  `Chewbee/Adonnante#2601` reste l'issue de suivi de l'extraction côté
+  Adonnante. `branche` ci-dessous par tâche.
 - **Adonnante intouché côté code (D9), et `docs/backlog.md` JAMAIS touché (décision 2026-11-10 : SoftwareFactory est un nouveau projet ; la traçabilité vit sur l'issue `Chewbee/Adonnante#2601` et dans ce dépôt).** Cette Phase A ne modifie Adonnante QUE par `docs/03-adr/0195-*` et `docs/_index.md` (tâche 10). Préuve : à la fin, `git -C Adonnante diff --stat origin/dev` ne liste que ces deux fichiers.
 - **Git.** `git stash` interdit partout (ADR-0140). Dans Adonnante, `reset/restore/clean/checkout --` passent par `node scripts/git-worktree-safe.mjs <worktree-absolu> …` (ADR-0066) ; `git worktree list` avant toute édition. Dans le nouveau dépôt SF (clone neuf `C:/Users/gh/dev/SoftwareFactory`) les règles git Adonnante ne s'appliquent pas à son arbre, la ban stash si.
 - **Branches.** SF : PR vers sa branche par défaut `dev` (dépôt neuf : initialisée sur `dev`). Projet d'essai : dépôt privé neuf `Chewbee/sf-recette`, branch `dev`. Adonnante : `docs/2601-usine-softwarefactory` depuis `origin/dev`.
@@ -99,9 +102,16 @@ gh repo edit Chewbee/SoftwareFactory --default-branch dev
   "name": "softwarefactory",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test tests/*.test.mjs hooks/*.test.mjs" }
+  "scripts": { "test": "node --test" }
 }
 ```
+
+> **Écart documenté (relecture 880e7dc, finding MINEUR)** : posé `node --test`
+> nu — les répertoires `tests/` et `hooks/` n'existent pas encore et la forme
+> à globs du plan aurait échoué (glob non étendu, exit ≠ 0). Découverte
+> récursive par défaut ; les globs explicites
+> `tests/*.test.mjs hooks/*.test.mjs` reprennent à T3/T8, quand les
+> répertoires existent, pour que script package.json et ligne CI coïncident.
 
 `README.md` : 10 lignes (quoi, adoption, pointeur vers `docs/adoption.md` à venir). `CLAUDE.md` : développement de l'usine SEULEMENT (charte `redaction-pr-issues` reprise, TDD, jamais de code produit). `AGENTS.md` : un pointer vers `CLAUDE.md`. `LICENSE` : MIT. `.gitignore` : `node_modules/`.
 
@@ -208,7 +218,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 **Files:** Create (SF) : `docs/adoption.md`, `docs/harnais.md`, `docs/issue-tracker.md`, `docs/triage-labels.md`.
 
 - [ ] **Step 1 :** copier `docs/06-agents/issue-tracker.md` et `docs/06-agents/triage-labels.md` depuis Adonnante, rewording dépôt-courant (les commandes `repos/Chewbee/Adonnante` deviennent des variables `<owner>/<repo>`).
-- [ ] **Step 2 :** `docs/adoption.md` : les 3 gestes (settings.json avec l'extrait de la spec, `plugins-a-jour.json` avec le format de T4, premier démarrage), + la prévention des hooks doubles + le shim.
+- [ ] **Step 2 :** `docs/adoption.md` : les 3 gestes (settings.json avec l'extrait de la spec, `plugins-a-jour.json` avec le format de T4, premier démarrage), + la prévention des hooks doubles + le shim. Préciser l'amorçage (finding AVIS de la relecture du squelette) : la ligne une commande `/plugin install softwarefactory --marketplace Chewbee/SoftwareFactory` — ou un install manuel — fait le PREMIER install ; le hook `plugin-a-jour` migré vit DANS le plugin, il prend le relais ensuite. À vérifier en recette (T9).
 - [ ] **Step 3 :** `docs/harnais.md` : charte D7 (contenu neutre, `${CLAUDE_PLUGIN_ROOT}` / câblage par harnais, Claude Code v1, adaptateur Hermes-Agent ensuite avec critère de sortie de la spec).
 - [ ] **Step 4 :** commit + preuve : aucun TODO, liens internes vérifiés, `docs` passée à `softwarefactory:relecteur` dans T10.
 
