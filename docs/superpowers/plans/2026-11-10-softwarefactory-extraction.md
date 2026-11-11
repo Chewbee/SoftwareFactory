@@ -115,7 +115,7 @@ gh repo edit Chewbee/SoftwareFactory --default-branch dev
 
 `README.md` : 10 lignes (quoi, adoption, pointeur vers `docs/adoption.md` à venir). `CLAUDE.md` : développement de l'usine SEULEMENT (charte `redaction-pr-issues` reprise, TDD, jamais de code produit). `AGENTS.md` : un pointer vers `CLAUDE.md`. `LICENSE` : MIT. `.gitignore` : `node_modules/`.
 
-- [ ] **Step 4 : commit.** `git add -A && git commit -m "feat(infra): cree le squelette plugin+marketplace de SoftwareFactory (#2601)" && git push`.
+- [ ] **Step 4 : commit.** `git add -A && git commit -m "feat(infra): cree le squelette plugin+marketplace de SoftwareFactory" -m "Fixes SF-10" -m "Fixes SF-11" && git push`.
 
 ---
 
@@ -140,7 +140,7 @@ for s in technical-writing writing-design-docs reviewing-technical-prose recordi
 - [ ] **Step 4 : réécrire `routine-bug-fix` et `routine-feature` (liaisons projet).** Zéro mention d'Adonnante / `dev` / labels en dur : les chaînes citent « le projet consommateur » et renvoient au noyau du projet pour les liaisons (label de tri, branche d'intégration, recette), avec une table `Liaison | Défaut | Où la trancher` en tête de chaque SKILL.md.
 - [ ] **Step 5 : NOTICE.** `cp "$AD/skills/NOTICE-skills-compte.md" skills/` puis mettre à jour : les chemins sources restent, les mentions « sessions cloud ne chargent que .claude/skills/ » sont réécrites pour le plugin.
 - [ ] **Step 6 : test-garde SF.** Adapter `agents-skills-preload.test.mjs` au layout plugin : tests qui parcourent `agents/*.md`, extraient `skills:`, exigent chaque préfixe `softwarefactory:` résolu dans `skills/` (sauf préfixes tiers déclarés `plugin:`). Test : `tests/agents-skills-preload.test.mjs`. Rouge d'abord : lancer et constater l'échec sur les références non préfixées, le citer. Puis corriger les frontmatter jusqu'au vert.
-- [ ] **Step 7 : commit + push.** `git commit -m "feat(contenus): migre les agents et skills de processus de l'usine (#2601)"`.
+- [ ] **Step 7 : commit + push.** `git commit -m "feat(contenus): migre les agents et skills de processus de l'usine" -m "Fixes SF-14" -m "Fixes SF-15"`.
 
 ---
 
@@ -164,7 +164,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 - [ ] **Step 2 : `hooks/hooks.json`.** Événements copiés de `.claude/settings.json` d'Adonnante, commandes réécrites `node "${CLAUDE_PLUGIN_ROOT}/hooks/<f>.mjs"` (et le wrapper `.cmd` si Windows l'exige au premier test réel — constater en tâche 6, adapter ici si oui) : SessionStart `startup|resume` → `plugin-a-jour` (timeout 600) et `checkout-a-jour` (timeout 120) ; PreToolUse `Agent` et `mcp__claude-code-remote__create_session` → `jev-model` (timeout 10) ; PreToolUse `Bash|PowerShell` → `git-stash-guard` (timeout 10) ; PostToolUse `TaskCreate|TaskUpdate` → `etat-job` (timeout 10) ; PostToolUse `SubagentHandback` → `jev-verdict` (timeout 10) ; SubagentStop matcher **`softwarefactory:relecteur|softwarefactory:relecteur-basic`** → `jev-verdict` : le hook de shim (T5) s'ajoute lors de sa tâche. Les hooks projet (`lint-format`, `ts-verifie`) NE vont PAS ici : ils restent dans les settings d'Adonnante.
 - [ ] **Step 3 : préfixer les tables internes.** Dans `jev-model-core.mjs` (BANDES) et `jev-verdict-core.mjs` (détection rôles) : clés `analyste` → `softwarefactory:analyste`, etc. ; `relecteur-basic` et `session-cloud` suivent. Les tests existants sont mis à jour avec les noms préfixés (rouge d'abord, cité).
 - [ ] **Step 4 : vert local.** `node --test hooks/*.test.mjs` → `# fail 0`, sorties citées. Tout hook référençant un chemin Adonnante en dur est corrigé en résolution par `${CLAUDE_PROJECT_DIR}` (variable reçue par les hooks) ou `import.meta.url`.
-- [ ] **Step 5 : commit.** `git commit -m "feat(hooks): migre les hooks generiques et leur cablage sous \${CLAUDE_PLUGIN_ROOT} (#2601)"`.
+- [ ] **Step 5 : commit.** `git commit -m "feat(hooks): migre les hooks generiques et leur cablage sous \${CLAUDE_PLUGIN_ROOT}" -m "Fixes SF-16" -m "Fixes SF-17"`.
 
 **Interfaces:** Produces : `hooks/hooks.json` (les tâches 5 et 6 l'étendent), `jev-model-core.mjs` BANDES préfixées (T4/T9 s'appuient dessus).
 
@@ -180,7 +180,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 - [ ] **Step 2 : vérifier le rouge.** `node --test hooks/plugin-a-jour.test.mjs` → `# fail` sur les 3, sortie citée.
 - [ ] **Step 3 : implémenter.** Dans `mettreAJour({ executer, binaire, env })` : lire `path.join(env.CLAUDE_PROJECT_DIR ?? process.cwd(), ".claude", "plugins-a-jour.json")` ; si présent et JSON valide : `PLUGINS = JSON.parse(...)` avec validation par entrée (`nom`, `marche`, `source` non vides, sinon échec franc listant l'entrée fautive) ; sinon défaut. Message de succès inchangé par entrée.
 - [ ] **Step 4 : vert.** `node --test hooks/*.test.mjs` → `# fail 0` (les tests historiques d'idempotence et délais restent verts).
-- [ ] **Step 5 : commit.** `git commit -m "feat(plugin-a-jour): lit la liste des plugins dans le projet consommateur (#2601)"`.
+- [ ] **Step 5 : commit.** `git commit -m "feat(plugin-a-jour): lit la liste des plugins dans le projet consommateur" -m "Fixes SF-18"`.
 
 **Interfaces:** Produces : contrat `plugins-a-jour.json` = tableau de `{ nom, marche, source }` (T9 écrit le projet d'essai avec).
 
@@ -196,7 +196,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
 - [ ] **Step 2 : test rouge.** `resoudre(registreJson, nom = "softwarefactory@<marche>")` rend le dossier de version ; absent → `null` (échec franc à l'écriture). `ecrireShims({ env, registre, ecrire })` : écrit `<CLAUDE_PROJECT_DIR>/.claude/hooks/jev-cli.mjs` = shim d'une ligne (ré-export du `jev-cli.mjs` du chemin résolu, avec en-tête « fichier généré par l'usine, réécrit à chaque session — ne pas éditer ») ; plugin introuvable → erreur typée avec message clair (jamais de repli).
 - [ ] **Step 3 : vérifier le rouge.** Sortie citée : fonction absente (`resoudre is not defined`).
 - [ ] **Step 4 : implémenter + brancher.** `hooks.json` SessionStart ajoute `ecrire-shims` (timeout 60, après `plugin-a-jour`). Le shim garde l'usage actuel : `node .claude/hooks/jev-cli.mjs niveau --role <agent>` fonctionne mot pour mot, et la permission Adonnante `Bash(node .claude/hooks/jev-cli.mjs:*)` ne change pas.
-- [ ] **Step 5 : vert + commit.** `node --test hooks/*.test.mjs` → `# fail 0` ; `git commit -m "feat(shims): ecrit le shim jev-cli a chemin stable depuis le plugin installe (#2601)"`.
+- [ ] **Step 5 : vert + commit.** `node --test hooks/*.test.mjs` → `# fail 0` ; `git commit -m "feat(shims): ecrit le shim jev-cli a chemin stable depuis le plugin installe" -m "Fixes SF-19"`.
 
 ---
 
@@ -234,7 +234,7 @@ rm -f hooks/rules-frontmatter.test.mjs hooks/taches-natives.test.mjs hooks/ts-ve
   - `tests` : `runs-on:` copié de `.github/workflows/lint.yml` d'Adonnante (`grep -n "runs-on" C:/Users/gh/dev/Adonnante/.github/workflows/lint.yml`, même label/labels), steps : `checkout@v4`, `actions/setup-node@v4` (Node 22, cache npm), `npm ci --no-audit` (package.json sans deps → étape `npm install --no-save vite` NON nécessaire : garder `node --test tests/*.test.mjs hooks/*.test.mjs` direct, sans install), puis `node --test` avec sorties citées.
   - `manifeste` : même runs-on, step `claude plugin validate` (CLI Claude Code installée sur les runners ou `npm install -g @anthropic-ai/claude-code` ; la CI Adonnante fait foi pour la façon d'obtenir la CLI — vérifier `grep -rn "claude" C:/Users/gh/dev/Adonnante/.github/workflows/` ; si aucun précédent, `npx @anthropic-ai/claude-code@latest plugin validate .`).
 - [ ] **Step 2 : runners.** Les runners Hetzner d'Adonnante sont inscrits au niveau repo Adonnante : le dépôt SF n'y a PAS accès automatiquement. Suivre `docs/06-agents/ci-runners.md` et la skill `adonnante-runners-ci` (Hermes) : obtenir `gh api repos/Chewbee/SoftwareFactory/actions/runners/registration-token --jq .token`, se connecter à un hôte (cx33, patron du doc), inscrire un service runner supplémentaire avec les labels `hote-*` identiques, sans toucher au service Adonnante existant. Opération sensible : si une connexion manque, `kanban_block(kind=capability)` et signaler sur #2601 — jamais de contournement.
-- [ ] **Step 3 : preuve.** Ouvrir la PR `chore/2601-ci` sur SF : run vert cité (n° de run, jobs `tests` + `manifeste`, durée). `gh run list --repo Chewbee/SoftwareFactory --limit 3`.
+- [ ] **Step 3 : preuve.** Ouvrir la PR `chore/SF-12-ci` sur SF : run vert cité (n° de run, jobs `tests` + `manifeste`, durée). `gh run list --repo Chewbee/SoftwareFactory --limit 3`.
 - [ ] **Step 4 :** commentaire de preuve sur #2601, puis fusion par relecture (T10).
 
 ---

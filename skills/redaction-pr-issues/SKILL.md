@@ -54,7 +54,7 @@ Pas de paragraphe de synthèse à la fin qui répète ce qui précède.
   (`le menu Select ne s'ouvre plus après un clic` plutôt que
   `régression jsdom`) — le mécanisme va dans le corps, une fois vérifié.
 - Corps : les termes de recherche utilisés pour vérifier l'absence de
-  doublon (exigé par `CLAUDE.md`), puis preuve (log, capture, commande).
+  doublon (exigé par le noyau du projet), puis preuve (log, capture, commande).
 - Distinguer explicitement une régression confirmée d'une hypothèse : si
   la cause profonde n'est pas certaine, le dire (« cause exacte non
   confirmée entre X et Y ») plutôt que présenter une piste comme acquise.

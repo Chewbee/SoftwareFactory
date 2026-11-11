@@ -44,7 +44,7 @@ function extraireFrontmatter(texte, fichier) {
 
 function entréesSkills(lignes, finEntete, fichier, erreurs) {
   const entetes = lignes.slice(0, finEntete);
-  const idx = entetes.findIndex((l) => l === "skills:");
+  const idx = entetes.findIndex((l) => /^skills:/.test(l));
   if (idx === -1) return [];
   // Forme inline : skills: [a, b]
   if (/^skills:\s*\[.*\]\s*$/.test(entetes[idx])) {
@@ -75,6 +75,17 @@ test("chaque entrée skills: d'un agent est namespacée, préfixe connu, et rés
   for (const fichier of lireFichiersMd(DOSSIER_AGENTS)) {
     const texte = fs.readFileSync(fichier, "utf8");
     const { lignes, finEntete } = extraireFrontmatter(texte, fichier);
+    // Une ligne de liste hors clé `skills:` est du YAML que cette garde ne
+    // connaît pas : le signaler plutôt que l'ignorer en silence.
+    let clé = null;
+    for (const l of lignes.slice(0, finEntete)) {
+      const k = l.match(/^([A-Za-z][A-Za-z-]*):/);
+      if (k) {
+        clé = k[1];
+      } else if (/^\s*-\s/.test(l) && clé !== "skills") {
+        erreurs.push(`${path.basename(fichier)} : ligne de liste hors clé skills: « ${l.trim()} » (clé ${clé ?? "aucune"} non gérée par la garde)`);
+      }
+    }
     for (const ref of entréesSkills(lignes, finEntete, fichier, erreurs)) {
       const [prefixe, nom] = ref.split(":");
       if (prefixe === ref) {

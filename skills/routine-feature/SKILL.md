@@ -21,6 +21,7 @@ Cette skill est harnais-neutre et projet-neutre ; le noyau du projet consommateu
 | UAT visuelle | recette du projet (ex. Adonnante : `pnpm recette`, ou recette navigateur sans desktop) | noyau, section Rendu |
 | Backlog miroir | features Linear si le projet adopte le pilotage Linear (`docs/pilotage-github-linear.md` de SoftwareFactory) ; sinon GitHub Issues | noyau du projet |
 | Labels de feature | ex. Adonnante : `enhancement` ou `feature` | convention de triage du projet |
+| Label de bug | `bug` | convention de triage du projet |
 | Labels d'écart | ex. `needs-info`, `wontfix`, `ready-for-human` | convention de triage du projet |
 | Journal | ex. Adonnante : `docs/06-agents/journal/AAAA-MM-JJ/<branche>.md` | convention du projet |
 
@@ -54,8 +55,10 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
 ```
 
 1. **Issues nues** (triage du projet) : `scan "" 'select((.labels | length) == 0)' || exit 1`.
-   Chacune reçoit son label de type, `bug` ou `enhancement`, selon son contenu.
-2. **Bugs d'abord** : `bugs=$(scan "labels=bug" '.') || exit 1`. S'il en
+   Chacune reçoit son label de type (`bug` ou `enhancement` — défauts de la
+   table des liaisons) selon son contenu.
+2. **Bugs d'abord** : `bugs=$(scan "labels=bug" '.') || exit 1` (label de bug
+   de la liaison). S'il en
    existe, le dire et demander : passer à `softwarefactory:routine-bug-fix`,
    ou continuer les features.
 3. **Candidates** : les labels de feature de la liaison ci-dessus. Un appel par
@@ -72,7 +75,8 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
    label, toutes les pages, même filtre. Avec le pilotage Linear : lire les
    features ouvertes de la team du projet par l'API/MCP Linear, même tri.
 4. **Écarter** : les labels d'écart de la liaison ci-dessus (leur convention
-   est documentée dans `docs/triage-labels.md`) ; epic (une epic se traite
+   est documentée dans `docs/triage-labels.md` de SoftwareFactory) ; epic (une
+   epic se traite
    par ses sous-issues) ; issue déjà couverte par une PR ouverte ou
    une branche `feat/*` vivante (chercher son numéro dans les PR ouvertes) ;
    issue déjà livrée dans la branche d'intégration distante (la commenter,

@@ -5,7 +5,7 @@
     {
       "id": 1,
       "subject": "Task 1: Dépôt SoftwareFactory et squelette",
-      "status": "pending",
+      "status": "done",
       "branche": "dev (dépôt Chewbee/SoftwareFactory, initialisation)",
       "issue": 2601,
       "modelTier": "mechanical",
@@ -15,8 +15,8 @@
     {
       "id": 2,
       "subject": "Task 2: Agents, skills, NOTICE migrés",
-      "status": "pending",
-      "branche": "feat/2601-contenus (SF)",
+      "status": "in_progress",
+      "branche": "feat/SF-14-contenus-migres (SF)",
       "issue": 2601,
       "modelTier": "mechanical",
       "model": "haiku",
@@ -26,7 +26,7 @@
       "id": 3,
       "subject": "Task 3: Hooks, câblage, gardes",
       "status": "pending",
-      "branche": "feat/2601-hooks (SF)",
+      "branche": "feat/SF-16-hooks-generiques (SF)",
       "issue": 2601,
       "modelTier": "standard",
       "model": "sonnet",
@@ -36,7 +36,7 @@
       "id": 4,
       "subject": "Task 4: plugin-a-jour paramétrable",
       "status": "pending",
-      "branche": "feat/2601-plugins-a-jour (SF)",
+      "branche": "feat/SF-18-plugins-a-jour (SF)",
       "issue": 2601,
       "modelTier": "standard",
       "model": "sonnet",
@@ -46,7 +46,7 @@
       "id": 5,
       "subject": "Task 5: Hook ecrire-shims et shim jev-cli",
       "status": "pending",
-      "branche": "feat/2601-plugins-a-jour (SF)",
+      "branche": "feat/SF-19-shims-jev-cli (SF)",
       "issue": 2601,
       "modelTier": "standard",
       "model": "sonnet",
@@ -66,7 +66,7 @@
       "id": 7,
       "subject": "Task 7: Docs de l'usine",
       "status": "pending",
-      "branche": "docs/2601-usine-docs (SF)",
+      "branche": "docs/SF-20-docs-usine (SF)",
       "issue": 2601,
       "modelTier": "mechanical",
       "model": "haiku",
@@ -76,7 +76,7 @@
       "id": 8,
       "subject": "Task 8: CI de SoftwareFactory sur les runners Hetzner",
       "status": "pending",
-      "branche": "chore/2601-ci (SF)",
+      "branche": "chore/SF-12-ci (SF)",
       "issue": 2601,
       "modelTier": "standard",
       "model": "sonnet",
@@ -103,5 +103,5 @@
       "description": "**Goal :** ADR-0195 (extraction de l'usine, D1-D12 condensés, entrée dans docs/_index.md, ne remplace aucun ADR), PR vers `dev` Adonnante portant l'ADR et son entrée _index SEULEMENT (spec + plan + tasks.json vivent dans SoftwareFactory ; docs/backlog.md d'Adonnante jamais touché — SoftwareFactory est un projet séparé, traçabilité sur l'issue Chewbee/Adonnante#2601), body selon redaction-pr-issues, `Corrige #2601` sans `Closes`, relecture adversariale par `softwarefactory:relecteur` (model : opus, jamais routé ; Jev : rôle hors table, repli = défaut du rôle), rapport `<!-- relecture branche=docs/2601-usine-softwarefactory tache=finale -->` sur #2601, `VERDICT : PRÊT` avant ouverture ; auto-merge armé après UAT T9 explicite. Phase B jamais lancée avant ce verdict (D9).\n\n**Exécutant :** agent principal + `relecteur`. **Dépend de :** T1-T9, verdict utilisateur de T9."
     }
   ],
-  "lastUpdated": "2026-11-10T00:00:00+00:00"
+  "lastUpdated": "2026-11-11T19:00:00+01:00"
 }
