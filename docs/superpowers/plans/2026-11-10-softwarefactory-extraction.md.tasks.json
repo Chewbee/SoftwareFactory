@@ -65,7 +65,7 @@
     {
       "id": 7,
       "subject": "Task 7: Docs de l'usine",
-      "status": "in_progress",
+      "status": "done",
       "branche": "docs/SF-20-docs-usine (SF)",
       "issue": 2601,
       "modelTier": "mechanical",
@@ -75,7 +75,7 @@
     {
       "id": 8,
       "subject": "Task 8: CI de SoftwareFactory sur les runners Hetzner",
-      "status": "pending",
+      "status": "in_progress",
       "branche": "chore/SF-12-ci (SF)",
       "issue": 2601,
       "modelTier": "standard",
