@@ -315,7 +315,9 @@ const USAGE =
   "        jev-cli.mjs choix < '{\"etat\":\"…\",\"options\":{\"a\":\"…\",\"b\":\"…\"}}'\n" +
   "        jev-cli.mjs bilan\n";
 
-async function main() {
+// main est exporté : le shim écrit par ecrire-shims (SF-19) dans le projet
+// consommateur y délègue, l'exécution directe restant inchangée.
+export async function main() {
   const [commande, option, role] = process.argv.slice(2);
   if (commande === "bilan" && option === undefined) return bilan(process.env);
   try {

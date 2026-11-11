@@ -73,7 +73,10 @@ function lirePlugins(env = process.env) {
   } catch (e) {
     return { erreur: `la liste des plugins à jour (${fichier}) n'est pas du JSON valide : ${e.message}` };
   }
-  if (!Array.isArray(liste) || liste.length === 0) {
+  if (!Array.isArray(liste)) {
+    return { erreur: `la liste des plugins à jour (${fichier}) n'est pas une liste de plugins : déclare un tableau [{ nom, marche, source }, …]` };
+  }
+  if (liste.length === 0) {
     return { erreur: `la liste des plugins à jour (${fichier}) est vide : déclare au moins un plugin ou supprime le fichier` };
   }
   for (const [index, entree] of liste.entries()) {

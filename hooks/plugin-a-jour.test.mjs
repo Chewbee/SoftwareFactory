@@ -72,7 +72,7 @@ test("les huit commandes, deux plugins dans cet ordre, sans rien lire avant : su
       [MAJ_PLUGIN_CESIUM]: { stdout: SORTIE_MAJ_CESIUM },
     }),
   );
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.equal(COMMANDES_MAX, 8);
   assert.deepEqual(lancees, COMMANDES);
   assert.deepEqual(r.commandes, lancees);
@@ -97,7 +97,7 @@ test("succès : seule la dernière ligne non vide de install et de update est re
       [MAJ_PLUGIN_CESIUM]: { stdout: "√ cesium à jour.\n" },
     }),
   );
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.equal(
     r.message,
     `superpowers-extended-cc : √ Successfully installed plugin: ${PLUGIN} (scope: user) ; √ Plugin "superpowers-extended-cc" updated from 6.5.3-dev to 6.6.1-dev for scope user. Restart to apply changes` +
@@ -107,7 +107,7 @@ test("succès : seule la dernière ligne non vide de install et de update est re
 
 test("succès sans rien sur stdout : le message le dit et nomme la commande, jamais de succès muet", () => {
   const { executer } = fausseCli(reussites({ [MAJ_PLUGIN]: { stdout: SORTIE_MAJ } }));
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.equal(r.ok, true);
   assert.ok(r.message.includes(`« ${INSTALLATION} » a réussi sans rien écrire sur stdout`), r.message);
 });
@@ -115,7 +115,7 @@ test("succès sans rien sur stdout : le message le dit et nomme la commande, jam
 for (const [rang, commande] of COMMANDES.entries()) {
   test(`commande en échec (${commande}) : arrêt des seules commandes restantes de son plugin, message qui nomme la commande, son code et son stderr, aucune exception`, () => {
     const { executer, lancees } = echecALaCommande(rang, { code: 1, stderr: "× Failed: réseau coupé\n" });
-    const r = mettreAJour({ executer });
+    const r = mettreAJour({ executer, env: {} });
     assert.deepEqual(lancees, lanceesQuandEchec(rang));
     assert.equal(r.ok, false);
     assert.ok(r.message.includes(`« ${commande} »`), r.message);
@@ -126,7 +126,7 @@ for (const [rang, commande] of COMMANDES.entries()) {
 
 test("échec d'une commande du 1er plugin : le 2e plugin est quand même traité, le message nomme les deux", () => {
   const { executer, lancees } = echecALaCommande(2, { code: 1, stderr: "× Failed: plugin introuvable\n" });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.deepEqual(lancees, [AJOUT_MARCHE, MAJ_MARCHE, INSTALLATION, ...COMMANDES_CESIUM]);
   assert.equal(r.ok, false);
   assert.match(r.message, /superpowers-extended-cc : la mise à jour du plugin superpowers-extended-cc a échoué : « claude plugin install [^»]+ » a rendu le code 1 : × Failed: plugin introuvable/);
@@ -136,7 +136,7 @@ test("échec d'une commande du 1er plugin : le 2e plugin est quand même traité
 
 test("échec d'une commande du 2e plugin : ok est false, le 1er plugin garde son succès dans le message", () => {
   const { executer, lancees } = echecALaCommande(5, { code: 2, stderr: "× marché cesium injoignable\n" });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.deepEqual(lancees, [...COMMANDES_SUPERPOWERS, AJOUT_MARCHE_CESIUM, MAJ_MARCHE_CESIUM]);
   assert.equal(r.ok, false);
   assert.match(r.message, /superpowers-extended-cc : √ ok ; √ ok/);
@@ -150,7 +150,7 @@ test("CLI claude absente : message bruyant, une tentative par plugin, chacun nom
     [AJOUT_MARCHE]: { code: null, erreur: "ENOENT" },
     [AJOUT_MARCHE_CESIUM]: { code: null, erreur: "ENOENT" },
   });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.deepEqual(lancees, [AJOUT_MARCHE, AJOUT_MARCHE_CESIUM]);
   assert.equal(r.ok, false);
   assert.equal(occurrences(r.message, "« claude » est introuvable"), 2);
@@ -172,7 +172,7 @@ test("binaire explicite introuvable : le message et la liste des commandes nomme
 
 test("commande sans code de sortie (délai dépassé) : la commande et la cause sont nommées", () => {
   const { executer } = echecALaCommande(1, { code: null, erreur: "ETIMEDOUT" });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.equal(r.ok, false);
   assert.ok(r.message.includes(`« ${MAJ_MARCHE} »`), r.message);
   assert.match(r.message, /sans code de sortie \(ETIMEDOUT\)/);
@@ -184,7 +184,7 @@ const CAUSE_LONGUE = "fatal: Unable to create '/root/.claude/plugins/marketplace
 test("stderr trop long : la troncature garde la fin, où se trouve la cause, précédée de …", () => {
   const stderr = `${"x".repeat(400)} ${CAUSE_LONGUE}\n`;
   const { executer } = echecALaCommande(1, { code: 1, stderr });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.ok(r.message.includes(`: …${stderr.trim().slice(-300)} | `), r.message);
   assert.ok(r.message.includes("index.lock"), r.message);
   assert.ok(!r.message.includes("x".repeat(250)), "le début du stderr n'est pas gardé : 400 x au départ, il n'en reste que la fin");
@@ -193,7 +193,7 @@ test("stderr trop long : la troncature garde la fin, où se trouve la cause, pr�
 test("stderr de 300 caractères : rien n'est tronqué", () => {
   const stderr = "e".repeat(300);
   const { executer } = echecALaCommande(1, { code: 1, stderr });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.ok(r.message.includes(`: ${stderr} | `), r.message);
   assert.ok(!r.message.includes("…"), r.message);
 });
@@ -201,14 +201,14 @@ test("stderr de 300 caractères : rien n'est tronqué", () => {
 test("stderr vide : la fin du stdout sert de détail à l'échec", () => {
   const stdout = `${"y".repeat(400)} Plugin not found in marketplace\n`;
   const { executer } = echecALaCommande(3, { code: 1, stdout, stderr: "  \n" });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.ok(r.message.includes(`: …${stdout.trim().slice(-300)} | `), r.message);
   assert.ok(r.message.includes("Plugin not found in marketplace"), r.message);
 });
 
 test("stderr présent : le stdout n'est pas repris dans l'échec", () => {
   const { executer } = echecALaCommande(2, { code: 1, stdout: "bruit de stdout", stderr: "cause réelle\n" });
-  const r = mettreAJour({ executer });
+  const r = mettreAJour({ executer, env: {} });
   assert.match(r.message, /cause réelle/);
   assert.ok(!r.message.includes("bruit de stdout"), r.message);
 });
@@ -482,6 +482,33 @@ test("liste vide : échec franc (jamais de repli silencieux vers les défauts)",
     assert.equal(r.ok, false);
     assert.deepEqual(lancees, []);
     assert.ok(r.message.includes("vide"), r.message);
+  } finally {
+    p.nettoyer();
+  }
+});
+
+test("entrée non-objet : échec franc qui la nomme, aucune commande lancée", () => {
+  const p = projetAvec(JSON.stringify([{ nom: "x", marche: "y", source: "z" }, "pas un objet"]));
+  try {
+    const { executer, lancees } = fausseCli({});
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, false);
+    assert.deepEqual(lancees, []);
+    assert.ok(r.message.includes("l'entrée n'est pas un objet"), r.message);
+    assert.ok(r.message.includes("pas un objet"), r.message);
+  } finally {
+    p.nettoyer();
+  }
+});
+
+test("fichier présent mais JSON non-liste : échec franc qui le dit (pas « vide »)", () => {
+  const p = projetAvec(JSON.stringify({ nom: "x" }));
+  try {
+    const { executer, lancees } = fausseCli({});
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, false);
+    assert.deepEqual(lancees, []);
+    assert.ok(r.message.includes("n'est pas une liste"), r.message);
   } finally {
     p.nettoyer();
   }
