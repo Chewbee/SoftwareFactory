@@ -15,12 +15,16 @@
 // code (introuvable, délai, signal). `creerExecuteur` fabrique l'exécuteur réel, seule
 // partie qui lance un processus, exportée pour que le test prouve la liaison du délai.
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 
 const LONGUEUR_DETAIL = 300;
 const SUITE = "Un plugin installé ou mis à jour ici ne se charge qu'au démarrage suivant ou après `/reload-plugins`.";
 
-// Les plugins, dans cet ordre : `source` est le dépôt GitHub du marketplace, `marche` son nom.
-const PLUGINS = [
+// Les plugins par défaut, dans cet ordre : `source` est le dépôt GitHub du
+// marketplace, `marche` son nom. Un projet consommateur peut imposer sa
+// propre liste via .claude/plugins-a-jour.json (lirePlugins, SF-18).
+const PLUGINS_DEFAUT = [
   { nom: "superpowers-extended-cc", marche: "superpowers-extended-cc-marketplace", source: "pcvelz/superpowers" },
   { nom: "cesiumjs-skills", marche: "cesiumjs-skills", source: "CesiumGS/cesiumjs-skills" },
 ];
@@ -40,8 +44,55 @@ function etapes({ nom, marche, source }) {
 
 // Délai par commande de la CLI et nombre de commandes : leur produit doit rester sous le
 // `timeout` du hook dans hooks/hooks.json (test dans plugin-a-jour.test.mjs).
+// COMMANDES_MAX borne la liste PAR DÉFAUT : un consommateur qui déclare plus
+// de plugins que les deux défauts doit vérifier son budget lui-même (recette
+// d'adoption, docs/adoption.md).
 export const DELAI_COMMANDE_MS = 70_000;
-export const COMMANDES_MAX = PLUGINS.reduce((total, plugin) => total + etapes(plugin).length, 0);
+export const COMMANDES_MAX = PLUGINS_DEFAUT.reduce((total, plugin) => total + etapes(plugin).length, 0);
+
+// SF-18 : la liste des plugins à maintenir vient du projet consommateur,
+// dans .claude/plugins-a-jour.json à la racine du projet de la session.
+// Rend { plugins } quand la liste est exploitable (fichier absent → défaut),
+// { erreur } sinon : JSON invalide, liste vide ou entrée fautive donnent un
+// échec franc, jamais un repli silencieux vers les défauts.
+const FICHIER_LISTE = path.join(".claude", "plugins-a-jour.json");
+
+function lirePlugins(env = process.env) {
+  const racine = env?.CLAUDE_PROJECT_DIR ?? process.cwd();
+  const fichier = path.join(racine, FICHIER_LISTE);
+  let brut;
+  try {
+    brut = fs.readFileSync(fichier, "utf8");
+  } catch (e) {
+    if (e && typeof e.code === "string" && e.code === "ENOENT") return { plugins: PLUGINS_DEFAUT };
+    return { erreur: `la liste des plugins à jour est illisible (${fichier} : ${e.code ?? "erreur de lecture"})` };
+  }
+  let liste;
+  try {
+    liste = JSON.parse(brut);
+  } catch (e) {
+    return { erreur: `la liste des plugins à jour (${fichier}) n'est pas du JSON valide : ${e.message}` };
+  }
+  if (!Array.isArray(liste) || liste.length === 0) {
+    return { erreur: `la liste des plugins à jour (${fichier}) est vide : déclare au moins un plugin ou supprime le fichier` };
+  }
+  for (const [index, entree] of liste.entries()) {
+    const fautive =
+      typeof entree !== "object" || entree === null || Array.isArray(entree)
+        ? "l'entrée n'est pas un objet"
+        : typeof entree.nom !== "string" || entree.nom === ""
+          ? "nom manquant ou vide"
+          : typeof entree.marche !== "string" || entree.marche === ""
+            ? "marche manquant ou vide"
+            : typeof entree.source !== "string" || entree.source === ""
+              ? "source manquante ou vide"
+              : null;
+    if (fautive !== null) {
+      return { erreur: `la liste des plugins à jour (${fichier}) contient une entrée fautive (n° ${String(index + 1)} : ${fautive}) : ${JSON.stringify(entree)}` };
+    }
+  }
+  return { plugins: liste };
+}
 
 // Garde la fin : la cause d'un échec (nom du verrou git…) est en fin de ligne.
 function condenser(texte) {
@@ -91,9 +142,11 @@ export function creerExecuteur(binaire, delaiMs, env = process.env) {
 // Un échec arrête les commandes restantes de SON plugin, pas celles du suivant ; `ok` vaut vrai si
 // tous les plugins ont réussi. Le message nomme chaque plugin, avec son succès ou son échec.
 // `binaire` : la commande que `executer` lance réellement, nommée dans les messages.
-export function mettreAJour({ executer, binaire = "claude" }) {
+export function mettreAJour({ executer, binaire = "claude", env = process.env }) {
+  const lu = lirePlugins(env);
+  if (lu.erreur !== undefined) return { ok: false, commandes: [], message: lu.erreur };
   const commandes = [];
-  const bilans = PLUGINS.map((plugin) => {
+  const bilans = lu.plugins.map((plugin) => {
     const resultats = [];
     for (const args of etapes(plugin)) {
       const commande = `${binaire} ${args.join(" ")}`;

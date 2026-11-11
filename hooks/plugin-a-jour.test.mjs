@@ -410,3 +410,92 @@ test("creerExecuteur lie le délai à la commande : un claude qui dort 2 s, dél
     fs.rmSync(d, { recursive: true, force: true });
   }
 });
+
+// --- SF-18 : la liste des plugins à maintenir vient du projet consommateur ---
+// .claude/plugins-a-jour.json à la racine du projet de la session (env
+// CLAUDE_PROJECT_DIR). Fichier absent → défaut ; présent mais invalide →
+// échec franc, jamais de repli silencieux.
+function projetAvec(contenuJson) {
+  const d = fs.mkdtempSync(path.join(os.tmpdir(), "plugin-a-jour-liste-"));
+  fs.mkdirSync(path.join(d, ".claude"), { recursive: true });
+  if (contenuJson !== null) fs.writeFileSync(path.join(d, ".claude", "plugins-a-jour.json"), contenuJson);
+  return { env: { CLAUDE_PROJECT_DIR: d }, nettoyer: () => fs.rmSync(d, { recursive: true, force: true }) };
+}
+
+const MARCHE_SF = "softwarefactory-marketplace";
+const PLUGIN_SF = `softwarefactory@${MARCHE_SF}`;
+const COMMANDES_SF = [
+  "claude plugin marketplace add Chewbee/SoftwareFactory",
+  `claude plugin marketplace update ${MARCHE_SF}`,
+  `claude plugin install ${PLUGIN_SF} --scope local`,
+  `claude plugin update ${PLUGIN_SF} --scope local`,
+];
+
+test("la liste du projet consommateur fait foi : softwarefactory remplace les deux défauts, aucune commande par défaut lancée", () => {
+  const p = projetAvec(JSON.stringify([{ nom: "softwarefactory", marche: MARCHE_SF, source: "Chewbee/SoftwareFactory" }]));
+  try {
+    // fausseCli fait échouer le test sur toute commande non prévue : les commandes par défaut ne doivent pas être lancées.
+    const { executer, lancees } = fausseCli(Object.fromEntries(COMMANDES_SF.map((c) => [c, { stdout: "√ ok\n" }])));
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, true);
+    assert.deepEqual(lancees, COMMANDES_SF);
+    assert.deepEqual(r.commandes, COMMANDES_SF);
+    assert.ok(r.message.includes("softwarefactory"));
+  } finally {
+    p.nettoyer();
+  }
+});
+
+test("fichier présent mais JSON invalide : échec franc qui nomme le fichier, aucune commande lancée", () => {
+  const p = projetAvec("pas du json");
+  try {
+    const { executer, lancees } = fausseCli({});
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, false);
+    assert.deepEqual(lancees, []);
+    assert.ok(r.message.includes("plugins-a-jour.json"), r.message);
+    assert.ok(r.message.includes("n'est pas du JSON valide"), r.message);
+  } finally {
+    p.nettoyer();
+  }
+});
+
+test("entrée fautive (source vide) : échec franc qui nomme l'entrée fautive, aucune commande lancée", () => {
+  const p = projetAvec(JSON.stringify([{ nom: "x", marche: "y", source: "" }]));
+  try {
+    const { executer, lancees } = fausseCli({});
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, false);
+    assert.deepEqual(lancees, []);
+    assert.ok(r.message.includes("source"), r.message);
+    assert.ok(r.message.includes("x"), r.message);
+  } finally {
+    p.nettoyer();
+  }
+});
+
+test("liste vide : échec franc (jamais de repli silencieux vers les défauts)", () => {
+  const p = projetAvec("[]");
+  try {
+    const { executer, lancees } = fausseCli({});
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, false);
+    assert.deepEqual(lancees, []);
+    assert.ok(r.message.includes("vide"), r.message);
+  } finally {
+    p.nettoyer();
+  }
+});
+
+test("fichier absent : les deux plugins par défaut, ordre conservé", () => {
+  const p = projetAvec(null);
+  try {
+    const reussitesDefaut = Object.fromEntries(COMMANDES.map((c) => [c, { stdout: "√ ok\n" }]));
+    const { executer, lancees } = fausseCli(reussitesDefaut);
+    const r = mettreAJour({ executer, env: p.env });
+    assert.equal(r.ok, true);
+    assert.deepEqual(lancees, COMMANDES);
+  } finally {
+    p.nettoyer();
+  }
+});
