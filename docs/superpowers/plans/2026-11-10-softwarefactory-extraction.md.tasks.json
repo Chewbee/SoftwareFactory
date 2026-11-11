@@ -45,7 +45,7 @@
     {
       "id": 5,
       "subject": "Task 5: Hook ecrire-shims et shim jev-cli",
-      "status": "in_progress",
+      "status": "done",
       "branche": "feat/SF-19-shims-jev-cli (SF)",
       "issue": 2601,
       "modelTier": "standard",
@@ -55,7 +55,7 @@
     {
       "id": 6,
       "subject": "Task 6: Pré-test du packaging réel",
-      "status": "pending",
+      "status": "in_progress",
       "branche": "preuve sur #2601 (aucun diff)",
       "issue": 2601,
       "modelTier": "mechanical",

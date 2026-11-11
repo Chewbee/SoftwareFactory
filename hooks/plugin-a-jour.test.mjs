@@ -160,7 +160,7 @@ test("CLI claude absente : message bruyant, une tentative par plugin, chacun nom
 test("binaire explicite introuvable : le message et la liste des commandes nomment le binaire tenté", () => {
   const binaire = "/opt/claude-code/bin/claude";
   const executer = () => ({ code: null, stdout: "", stderr: "", erreur: "ENOENT" });
-  const r = mettreAJour({ executer, binaire });
+  const r = mettreAJour({ executer, binaire, env: {} });
   assert.equal(r.ok, false);
   assert.deepEqual(r.commandes, [
     `${binaire} plugin marketplace add pcvelz/superpowers`,

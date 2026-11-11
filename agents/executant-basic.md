@@ -1,6 +1,6 @@
 ---
 name: executant-basic
-description: Filière BASIC (tâches mécaniques et sans arbitrage) — exécute une tâche courte et cadrée d'avance et produit le diff. À utiliser pour un rebase, une coquille, un renommage, un bump de dépendance, une ligne de garde déjà décidée. PAS pour un bug à diagnostiquer ni une feature : ceux-là passent par la filière Std (analyste → implementeur → relecteur). Son diff part quand même en relecture chez relecteur-basic.
+description: "Filière BASIC (tâches mécaniques et sans arbitrage) — exécute une tâche courte et cadrée d'avance et produit le diff. À utiliser pour un rebase, une coquille, un renommage, un bump de dépendance, une ligne de garde déjà décidée. PAS pour un bug à diagnostiquer ni une feature : ceux-là passent par la filière Std (analyste → implementeur → relecteur). Son diff part quand même en relecture chez relecteur-basic."
 tools: Read, Edit, Write, Grep, Glob, Bash, PowerShell, Skill
 model: haiku
 ---
