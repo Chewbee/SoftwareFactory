@@ -75,7 +75,7 @@
     {
       "id": 8,
       "subject": "Task 8: CI de SoftwareFactory sur les runners Hetzner",
-      "status": "in_progress",
+      "status": "done",
       "branche": "chore/SF-12-ci (SF)",
       "issue": 2601,
       "modelTier": "standard",
