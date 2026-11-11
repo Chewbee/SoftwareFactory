@@ -30,7 +30,7 @@ Puis, pour l'adoption complète d'un projet (autoUpdate + mise à jour par
 - `agents/` — sous-agents (`softwarefactory:analyste`, …) — *à migrer (EPIC A3)*
 - `skills/` — skills de processus (`softwarefactory:technical-writing`, …) — *à migrer (EPIC A3)*
 - `hooks/` — hooks d'événements + `hooks.json` avec `${CLAUDE_PLUGIN_ROOT}` — *à migrer (EPIC A3/A4)*
-- `docs/` — conventions, adoption, charte multi-harnais
+- `docs/` — conventions ([`backlog-linear.md`](docs/backlog-linear.md)), pilotage GitHub+Linear ([`pilotage-github-linear.md`](docs/pilotage-github-linear.md)), adoption, charte multi-harnais
 
 Statut : **Phase A — construction** (extraction par copie, la source Adonnante
 reste intacte jusqu'à la preuve ; spec, décisions D1-D12).
