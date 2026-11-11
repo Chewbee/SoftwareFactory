@@ -1,0 +1,107 @@
+{
+  "planPath": "docs/superpowers/plans/2026-11-10-softwarefactory-extraction.md",
+  "issue": 2601,
+  "tasks": [
+    {
+      "id": 1,
+      "subject": "Task 1: Dépôt SoftwareFactory et squelette",
+      "status": "pending",
+      "branche": "dev (dépôt Chewbee/SoftwareFactory, initialisation)",
+      "issue": 2601,
+      "modelTier": "mechanical",
+      "model": "haiku",
+      "description": "**Goal :** créer `Chewbee/SoftwareFactory` (privé), branch par défaut `dev`, squelette plugin+marketplace une racine (plugin.json, marketplace.json avec plugin racine + superpowers-extended-cc + cesiumjs-skills référencés, forms vérifiées par `claude plugin validate`), README/CLAUDE/AGENTS/package.json/LICENSE/.gitignore.\n\n**Exécutant :** `executant-basic` (Jev : mechanical, haiku, 0,84). **Dépend de :** aucune. Voir le plan `docs/superpowers/plans/2026-11-10-softwarefactory-extraction.md`, Task 1."
+    },
+    {
+      "id": 2,
+      "subject": "Task 2: Agents, skills, NOTICE migrés",
+      "status": "pending",
+      "branche": "feat/2601-contenus (SF)",
+      "issue": 2601,
+      "modelTier": "mechanical",
+      "model": "haiku",
+      "description": "**Goal :** copier 6 agents + 9 skills + NOTICE vers SF ; préfixer les références `skills:` des agents en `softwarefactory:` (`typesafe:typesafe-ai` inchangé) ; redaction-pr-issues rewritée dépôt-courant ; routine-bug-fix et routine-feature rewritées sans mention Adonnante (table Liaison|Défaut|Où trancher) ; test-garde adapté au layout plugin, rouge cité puis vert.\n\n**Exécutant :** `executant-basic` (Jev : mechanical, haiku, 0,62). **Dépend de :** T1."
+    },
+    {
+      "id": 3,
+      "subject": "Task 3: Hooks, câblage, gardes",
+      "status": "pending",
+      "branche": "feat/2601-hooks (SF)",
+      "issue": 2601,
+      "modelTier": "standard",
+      "model": "sonnet",
+      "description": "**Goal :** copies des 10 hooks + cores + tests (moins les gardes projet), `hooks/hooks.json` avec `${CLAUDE_PLUGIN_ROOT}` et matchers `softwarefactory:relecteur|softwarefactory:relecteur-basic`, tables internes jev préfixées (rouge cité), `node --test hooks/*.test.mjs` → `# fail 0` sur Windows, wrapper `.cmd` selon constat réel.\n\n**Exécutant :** `implementeur` (Jev : standard, sonnet, 0,60). **Dépend de :** T2."
+    },
+    {
+      "id": 4,
+      "subject": "Task 4: plugin-a-jour paramétrable",
+      "status": "pending",
+      "branche": "feat/2601-plugins-a-jour (SF)",
+      "issue": 2601,
+      "modelTier": "standard",
+      "model": "sonnet",
+      "description": "**Goal :** TDD : `.claude/plugins-a-jour.json` du projet = liste faisant foi (validation par entrée, échec franc JSON invalide/entrée fautive) ; absent → défaut courant (superpowers + cesiumjs). Tests rouges cités puis `node --test hooks/*.test.mjs` → `# fail 0`.\n\n**Exécutant :** `implementeur` (Jev : standard, sonnet, 0,82). **Dépend de :** T3."
+    },
+    {
+      "id": 5,
+      "subject": "Task 5: Hook ecrire-shims et shim jev-cli",
+      "status": "pending",
+      "branche": "feat/2601-plugins-a-jour (SF)",
+      "issue": 2601,
+      "modelTier": "standard",
+      "model": "sonnet",
+      "description": "**Goal :** sonder la forme réelle d'installed_plugins.json, puis TDD : `resoudre(registre, id)` → dossier de version (null sinon, échec franc) ; `ecrireShims` écrit `<CLAUDE_PROJECT_DIR>/.claude/hooks/jev-cli.mjs` (ré-export + en-tête « généré ») ; branché SessionStart (timeout 60). Usage `node .claude/hooks/jev-cli.mjs niveau --role …` inchangé, permission Adonnante inchangée.\n\n**Exécutant :** `implementeur` (Jev : standard, sonnet, 0,74). **Dépend de :** T3, T4."
+    },
+    {
+      "id": 6,
+      "subject": "Task 6: Pré-test du packaging réel",
+      "status": "pending",
+      "branche": "preuve sur #2601 (aucun diff)",
+      "issue": 2601,
+      "modelTier": "mechanical",
+      "model": "haiku",
+      "description": "**Goal :** `claude plugin validate` → code 0 ; session jetable `claude --plugin-dir` : skill `softwarefactory:technical-writing` adressable, agent `softwarefactory:analyste` vu, `git-stash-guard` refuse `git stash` ; wrapper `.cmd` si Windows l'exige ; preuves (commande + sortie) postées sur #2601.\n\n**Exécutant :** `executant-basic` (Jev : mechanical, haiku, 0,62). **Dépend de :** T5."
+    },
+    {
+      "id": 7,
+      "subject": "Task 7: Docs de l'usine",
+      "status": "pending",
+      "branche": "docs/2601-usine-docs (SF)",
+      "issue": 2601,
+      "modelTier": "mechanical",
+      "model": "haiku",
+      "description": "**Goal :** `docs/adoption.md` (3 gestes + hooks doubles + shim), `docs/harnais.md` (charte D7), copies rewordées de `issue-tracker.md`/`triage-labels.md` (`<owner>/<repo>` générique). Charte redaction-pr-issues chargée pour la rédaction.\n\n**Exécutant :** `executant-basic` (Jev : mechanical, haiku, 0,92). **Dépend de :** T2."
+    },
+    {
+      "id": 8,
+      "subject": "Task 8: CI de SoftwareFactory sur les runners Hetzner",
+      "status": "pending",
+      "branche": "chore/2601-ci (SF)",
+      "issue": 2601,
+      "modelTier": "standard",
+      "model": "sonnet",
+      "description": "**Goal :** workflow `ci.yml` (runs-on copié de lint.yml d'Adonnante) : job `tests` node --test sans install (zéro dep), job `manifeste` claude plugin validate (npx si aucun précédent CI) ; inscription d'un runner Hetzner sur le dépôt SF (jeton registration, service supplémentaire, patron docs/06-agents/ci-runners.md + skill adonnante-runners-ci ; blocage capability si accès manquant) ; run vert cité sur #2601. **Confiance Jev 0,26 → à trancher : doute = jev-cli choix puis décision utilisateur.**\n\n**Exécutant :** `implementeur` (Jev : standard, sonnet, 0,26, aTrancher). **Dépend de :** T3, T6."
+    },
+    {
+      "id": 9,
+      "subject": "Task 9: Projet d'essai sf-recette et preuve réelle (user-gate)",
+      "status": "pending",
+      "branche": "dev (dépôt Chewbee/sf-recette)",
+      "issue": 2601,
+      "modelTier": "frontier",
+      "model": "opus",
+      "description": "**Goal :** créer `Chewbee/sf-recette` (privé, dev par défaut), adoption 3 gestes (settings.json + plugins-a-jour.json au format T4, SANS cesiumjs pour prouver la paramétrisation), smoke headless (skills visibles, shim opérationnel, stash refusé), puis **Tâche user-gate : session réelle de l'utilisateur dans sf-recette avec la checklist du Critère de vérification, verdict « PRÊT » ou écarts sur #2601 — fermée par l'utilisateur, jamais par un agent.**\n\n**Exécutant :** `implementeur` (Jev : frontier, opus, 0,67) + utilisateur. **Dépend de :** T1 à T8."
+    },
+    {
+      "id": 10,
+      "subject": "Task 10: ADR-0195, relecture finale, PR docs vers dev (Adonnante)",
+      "status": "pending",
+      "branche": "docs/2601-usine-softwarefactory (Adonnante)",
+      "issue": 2601,
+      "modelTier": "review",
+      "model": "opus",
+      "description": "**Goal :** ADR-0195 (extraction de l'usine, D1-D12 condensés, entrée dans docs/_index.md, ne remplace aucun ADR), PR vers `dev` Adonnante (spec + plan + tasks.json + backlog + ADR, body selon redaction-pr-issues, `Corrige #2601` sans `Closes`), relecture adversariale par `softwarefactory:relecteur` (model : opus, jamais routé ; Jev : rôle hors table, repli = défaut du rôle), rapport `<!-- relecture branche=docs/2601-usine-softwarefactory tache=finale -->` sur #2601, `VERDICT : PRÊT` avant ouverture ; auto-merge armé après UAT T9 explicite. Phase B jamais lancée avant ce verdict (D9).\n\n**Exécutant :** agent principal + `relecteur`. **Dépend de :** T1-T9, verdict utilisateur de T9."
+    }
+  ],
+  "lastUpdated": "2026-11-10T00:00:00+00:00"
+}
