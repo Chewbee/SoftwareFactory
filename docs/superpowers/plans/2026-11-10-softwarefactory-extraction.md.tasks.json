@@ -100,7 +100,7 @@
       "issue": 2601,
       "modelTier": "review",
       "model": "opus",
-      "description": "**Goal :** ADR-0195 (extraction de l'usine, D1-D12 condensés, entrée dans docs/_index.md, ne remplace aucun ADR), PR vers `dev` Adonnante (spec + plan + tasks.json + backlog + ADR, body selon redaction-pr-issues, `Corrige #2601` sans `Closes`), relecture adversariale par `softwarefactory:relecteur` (model : opus, jamais routé ; Jev : rôle hors table, repli = défaut du rôle), rapport `<!-- relecture branche=docs/2601-usine-softwarefactory tache=finale -->` sur #2601, `VERDICT : PRÊT` avant ouverture ; auto-merge armé après UAT T9 explicite. Phase B jamais lancée avant ce verdict (D9).\n\n**Exécutant :** agent principal + `relecteur`. **Dépend de :** T1-T9, verdict utilisateur de T9."
+      "description": "**Goal :** ADR-0195 (extraction de l'usine, D1-D12 condensés, entrée dans docs/_index.md, ne remplace aucun ADR), PR vers `dev` Adonnante portant l'ADR et son entrée _index SEULEMENT (spec + plan + tasks.json vivent dans SoftwareFactory ; docs/backlog.md d'Adonnante jamais touché — SoftwareFactory est un projet séparé, traçabilité sur l'issue Chewbee/Adonnante#2601), body selon redaction-pr-issues, `Corrige #2601` sans `Closes`, relecture adversariale par `softwarefactory:relecteur` (model : opus, jamais routé ; Jev : rôle hors table, repli = défaut du rôle), rapport `<!-- relecture branche=docs/2601-usine-softwarefactory tache=finale -->` sur #2601, `VERDICT : PRÊT` avant ouverture ; auto-merge armé après UAT T9 explicite. Phase B jamais lancée avant ce verdict (D9).\n\n**Exécutant :** agent principal + `relecteur`. **Dépend de :** T1-T9, verdict utilisateur de T9."
     }
   ],
   "lastUpdated": "2026-11-10T00:00:00+00:00"
