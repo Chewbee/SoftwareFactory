@@ -34,8 +34,9 @@ le hook `plugin-a-jour` l'applique à chaque session :
 
 - Fichier **absent** → défaut : `superpowers-extended-cc` + `cesiumjs-skills`.
 - Champ en plus : toléré, ignoré. Doublons : tolérés (commandes idempotentes).
-- JSON invalide, liste vide ou entrée fautive (`nom`/`marche`/`source` vide) →
-  échec franc, aucune commande lancée — jamais de repli silencieux.
+- JSON invalide, liste vide ou entrée fautive (non-objet, champ manquant,
+  vide ou non-chaîne) → échec franc, aucune commande lancée — jamais de
+  repli silencieux.
 
 ## 3. Amorcer le premier install
 

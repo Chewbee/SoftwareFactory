@@ -21,8 +21,9 @@ Une issue sans label n'apparaît dans aucun balayage par label. Tout
 dépilement inclut donc un passage sur les issues nues, une par une (pas un
 lot), et chacune reçoit son label de type : `bug` si elle décrit un
 comportement défectueux, `enhancement` sinon. Le préfixe du titre
-(`bug(...)`, `feat(...)`, `chore(...)`) n'est qu'un indice ; une issue
-sans préfixe se juge sur son contenu. Le dépôt se déduit de `git remote
+(`bug(...)`, `fix(...)`, `feat(...)`, `chore(...)`, `étude(...)`) n'est
+qu'un indice ; une issue sans préfixe se juge sur son contenu. Le dépôt se
+déduit de `git remote
 get-url origin` :
 
 ```bash
@@ -43,3 +44,10 @@ harnais), parcourt toutes les pages sans plafond, écarte les PR que
 
 Une feature ou une étude passe ensuite par le triage de la table
 ci-dessus ; un bug part en correction sans triage.
+
+## Règle anti-rattrapage
+
+Pas de rattrapage en masse des issues existantes, pas de label posé
+automatiquement à l'ouverture : chaque label est posé pendant un
+dépilement, au vu du contenu de l'issue. Un projet consommateur qui a
+tranché autrement le dit dans son noyau — il prime.

@@ -43,3 +43,11 @@ neutre, l'adaptation vit dans un adaptateur par harnais**.
 5. Toute évolution du modèle d'un autre harnais part d'un adaptateur
    dédié ; on ne pollue jamais les cœurs neutres avec du vocabulaire
    d'un harnais particulier.
+
+## Harnais suivant : Hermes-Agent
+
+Critère de sortie de la spec : une session Hermes voit les skills
+`softwarefactory:*` dans son catalogue de skills (`skills_list`), les
+agents du plugin y sont dispatchables, et le shim `jev-cli` reste
+opérable depuis son terminal. L'adaptateur Hermes vit dans le plugin
+sans toucher aux cœurs neutres — chantier séparé (Phase C, SF-6).
