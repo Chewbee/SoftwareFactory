@@ -107,6 +107,12 @@ test("état de 32 001 caractères en repli : tronque vrai aussi", async () => {
   assert.deepEqual(r, { choix: null, confiance: null, probabilites: null, aTrancher: true, raison: "cle-absente", tronque: true });
 });
 
+test("état de 32 001 caractères avec réponse valide : aTrancher vrai, raison etat-tronque", async () => {
+  const r = await choisir({ etat: "x".repeat(32_001), options: OPTIONS, env: ENV,
+    fetchFn: repondant({ type: "choice", probabilities: { garder: 0.2, purger: 0.8 }, confidence: 0.9 }) });
+  assert.deepEqual(r, { choix: "purger", confiance: 0.9, probabilites: { garder: 0.2, purger: 0.8 }, aTrancher: true, raison: "etat-tronque", tronque: true });
+});
+
 test("CLI choix : état de 32 001 caractères → tronque vrai, code 0, message sur stderr", () => {
   const r = spawnSync(process.execPath, [CLI, "choix"], { input: JSON.stringify({ etat: "x".repeat(32_001), options: OPTIONS }), encoding: "utf8", env: {} });
   assert.equal(r.status, 0);
