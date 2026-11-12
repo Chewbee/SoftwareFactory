@@ -1501,8 +1501,8 @@ test("lireDepot : valeur mal formée → échec franc, jamais de dépôt deviné
   }
 });
 
-test("DEPOT vaut le défaut quand l'environnement du test ne le pose pas", () => {
-  assert.equal(DEPOT, "Chewbee/Adonnante");
+test("DEPOT est la résolution de l'environnement du chargement du cœur", () => {
+  assert.equal(DEPOT, lireDepot(process.env));
 });
 
 test("un processus fils avec ETAT_JOB_DEPOT résout DEPOT vers le dépôt du consommateur", async () => {
