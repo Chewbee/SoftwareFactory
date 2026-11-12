@@ -6,7 +6,8 @@
 // `choix` : Jev départage les options d'une décision propre à l'agent principal.
 //   printf '{"etat":"<raisonnement>","options":{"a":"…","b":"…"}}' | node .claude/hooks/jev-cli.mjs choix
 // Sortie : une ligne JSON { choix, confiance, probabilites, aTrancher, raison, tronque } ;
-// tronque vaut true quand l'état dépasse ETAT_MAX caractères : Jev n'en lit que le début.
+// tronque vaut true quand l'état dépasse ETAT_MAX caractères : Jev n'en lit que le début,
+// et tronque vrai met aussi aTrancher à vrai (raison etat-tronque si aucune autre).
 // Entrée invalide (JSON illisible, clé en double, moins de 2 ou plus de 10 options, nom, description ou état vides) : code 2.
 // `bilan` : taux de PAS PRÊT par agent d'implémentation, modèle et source, lu dans
 // .claude/logs/jev-model.jsonl.
@@ -157,6 +158,7 @@ export async function choisir({ etat, options, env, fetchFn, delaiMs = DELAI_MS 
   const lu = lireChoix(corps, entrees.map(([nom]) => nom));
   if (lu === null) return repli("reponse-invalide");
   if (lu.confiance < SEUIL_CONFIANCE) return { ...lu, aTrancher: true, raison: "confiance-basse", tronque };
+  if (tronque) return { ...lu, aTrancher: true, raison: "etat-tronque", tronque };
   return { ...lu, aTrancher: false, raison: null, tronque };
 }
 
