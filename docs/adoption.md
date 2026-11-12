@@ -70,9 +70,12 @@ shim vers la version à jour.
 - **Budget de démarrage** : le timeout du hook `plugin-a-jour` (600 s) couvre
   la liste par défaut (2 plugins, 8 commandes × 70 s). Au-delà de 2 plugins,
   vérifier le budget : n × 4 commandes × 70 s < 600 s.
-- **Publication des tâches natives** (`etat-job-publier`) : le dépôt cible
-  est encore en dur (`Chewbee/Adonnante`) — suivi SF-37 ; à paramétrer par
-  projet.
+- **Publication des tâches natives** (`etat-job-publier`) : le dépôt cible est
+  paramétrable par le projet consommateur via la variable d'environnement
+  `ETAT_JOB_DEPOT` (forme `owner/repo`, échec franc si mal formée), posée dans
+  l'environnement du terminal (ou du service) qui lance la session Claude Code
+  du projet — la clé est lue au chargement du hook, un process frais par
+  événement ; sans elle, défaut `Chewbee/Adonnante`.
 - **Ce que l'usine n'apporte pas** : les skills de domaine, les règles de
   zone et le noyau (invariants, commandes, branches) restent au projet
   consommateur. Le plugin ne connaît pas ton domaine.

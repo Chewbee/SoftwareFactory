@@ -95,7 +95,7 @@
     {
       "id": 10,
       "subject": "Task 10: ADR-0195, relecture finale, PR docs vers dev (Adonnante)",
-      "status": "pending",
+      "status": "done",
       "branche": "docs/2601-usine-softwarefactory (Adonnante)",
       "issue": 2601,
       "modelTier": "review",

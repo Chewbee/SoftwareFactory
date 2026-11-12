@@ -12,7 +12,25 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { setTimeout as attendre } from "node:timers/promises";
 
-export const DEPOT = "Chewbee/Adonnante";
+// SF-37 : le dépôt GitHub de publication vient du projet consommateur, dans
+// la variable d'environnement ETAT_JOB_DEPOT (« owner/repo ») — un
+// consommateur publie l'état de SES tâches vers SON tracker. Absente ou
+// vide : défaut Chewbee/Adonnante (la Phase B d'Adonnante). Mal formée :
+// échec franc au chargement du hook, jamais de publication vers un dépôt
+// deviné. Chaque hook est un processus frais : la lecture au chargement
+// suffit, et DEPOT reste une constante pour tout le module.
+export const DEPOT_DEFAUT = "Chewbee/Adonnante";
+
+export function lireDepot(env = process.env) {
+  const v = typeof env?.ETAT_JOB_DEPOT === "string" ? env.ETAT_JOB_DEPOT.trim() : "";
+  if (v === "") return DEPOT_DEFAUT;
+  if (!/^[\w.-]+\/[\w.-]+$/.test(v)) {
+    throw new Error(`ETAT_JOB_DEPOT invalide : « ${v} » — attendu « owner/repo », par ex. Chewbee/Adonnante`);
+  }
+  return v;
+}
+
+export const DEPOT = lireDepot(process.env);
 export const DELAI_VERROU_PERIME_MS = 5000;
 const BUDGET_VERROU_MS = 6000;
 // additionalContext est plafonné à 10 000 caractères (doc des hooks) ; le préfixe

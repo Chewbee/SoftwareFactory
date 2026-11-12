@@ -11,6 +11,7 @@ import {
   avecVerrou,
   cheminsBranche,
   corpsCommentaire,
+  DEPOT,
   ecrireJsonAtomique,
   lireCorpsCommentaire,
   ErreurEtatJob,
@@ -30,7 +31,7 @@ import {
 
 const ICI = path.dirname(fileURLToPath(import.meta.url));
 const BRANCHE = "feat/1998-tableau";
-const D = "/repos/Chewbee/Adonnante";
+const D = "/repos/" + DEPOT;
 const maintenant = () => new Date("2026-10-17T10:00:00Z");
 
 async function avecDossier(corps) {
@@ -852,6 +853,6 @@ test("suppression d'un doublon : seul un 404 vaut succès, un 500 fait échouer 
       panne: (m) => (m === "DELETE" ? 500 : null),
     });
     assert.equal((await lancer(d, gh)).resultat, "echec");
-    assert.match(publication(d).raison, /^DELETE \/repos\/Chewbee\/Adonnante\/issues\/comments\/20 : HTTP 500$/);
+    assert.match(publication(d).raison, new RegExp(`^DELETE /repos/` + DEPOT + `/issues/comments/20 : HTTP 500$`));
   });
 });
