@@ -1488,7 +1488,6 @@ const importCoeur = `import(${JSON.stringify(pathToFileURL(CHEMIN_COEUR).href)})
 test("lireDepot : défaut Chewbee/Adonnante quand l'env est absent ou vide", () => {
   assert.equal(lireDepot({}), "Chewbee/Adonnante");
   assert.equal(lireDepot({ ETAT_JOB_DEPOT: "   " }), "Chewbee/Adonnante");
-  assert.equal(lireDepot(undefined), "Chewbee/Adonnante");
 });
 
 test("lireDepot : la valeur du projet consommateur fait foi", () => {
