@@ -18,7 +18,7 @@ const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DOSSIER_AGENTS = path.join(RACINE, "agents");
 const DOSSIER_SKILLS = path.join(RACINE, "skills");
 const PREFIXE_PLUGIN = "softwarefactory";
-const PREFIXES_TIERS = ["superpowers-extended-cc", "typesafe", "cesiumjs"];
+const PREFIXES_TIERS = ["superpowers-extended-cc", "cesiumjs"];
 
 function lireFichiersMd(dossier) {
   return fs.readdirSync(dossier).filter((f) => f.endsWith(".md")).map((f) => path.join(dossier, f));
