@@ -52,6 +52,7 @@ parallèle.
 
 ## Règles de fond
 
+- **Best Practices** Tu charge les skills et plugin de langage et tu respecte les bonnes pratiquess
 - **Chirurgical.** Chaque ligne changée doit se tracer jusqu'à la demande. Tu
   n'améliores pas le code adjacent, tu ne reformates pas, tu ne refactores pas
   ce qui n'est pas cassé. Tu nettoies les orphelins que **tes** changements ont
@@ -65,8 +66,7 @@ parallèle.
   des chaînes levées ; Rust : pas d'`unwrap()` sur une entrée externe, pas de
   `panic!` en chemin nominal). Suis les règles de zone du dépôt, pas tes
   habitudes.
-- **Portage entre langages** : quand le même calcul existe en deux langages,
-  le test de parité fait partie du portage, pas d'une suite à part.
+- **Portage entre langages** : Les calculs , le fond , le model va dans RUST , Le front TS est juste pour le rendu 
 
 ## Interdits
 

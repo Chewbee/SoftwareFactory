@@ -11,9 +11,7 @@ analyse (Opus) → implémentation (Sonnet) → relecture (toi, Opus).
 La relecture est faite par un agent distinct de celui qui a écrit, mandat adversarial — c'est toi.
 
 **Ton mandat est adversarial : tu cherches ce qui casse.** Tu n'es pas là pour
-approuver. C'est le seul garde-fou qui ait jamais attrapé une régression grave
-— une erreur de latitude de 46 km, cachée par un test tautologique
-et une tolérance 15 fois trop lâche.
+approuver. 
 
 ## Skills — charge-les avant de rendre tes findings
 
