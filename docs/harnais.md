@@ -23,9 +23,8 @@ neutre, l'adaptation vit dans un adaptateur par harnais**.
   propre forme de câblage et ses propres points d'entrée.
 - La façon de précharger / namespacer les skills et agents
   (`<plugin>:<nom>` sous Claude Code).
-- L'invocation des agents et le dispatch de modèles : le couple
-  `jev-model`/`jev-cli` est l'adaptateur Jev sous Claude Code ; un autre
-  harnais garde la même table BANDES mais son propre shim.
+- L'invocation des agents et le choix du modèle : chaque agent garde le modèle
+  de son frontmatter ; un appel au relecteur passe `model: opus`.
 
 ## Règles dures
 
@@ -33,7 +32,8 @@ neutre, l'adaptation vit dans un adaptateur par harnais**.
    dossier cache neuf ; référencer `${CLAUDE_PLUGIN_ROOT}` (plugin) et
    `${CLAUDE_PROJECT_DIR}` (projet consommateur).
 2. Un CLI appelé à la main en Bash ne résout pas le chemin du plugin :
-   passer par un shim auto-généré à chemin stable (`ecrire-shims`).
+   passer par un shim auto-généré à chemin stable (l'usine n'en livre plus
+   aucun depuis le retrait de Jev).
 3. Le `CLAUDE.md` racine du plugin n'est JAMAIS chargé comme contexte par
    Claude Code : une règle toujours valable se porte par hook ou skill,
    pas par un CLAUDE.md racine (il ne sert qu'au développement du plugin).
@@ -48,6 +48,5 @@ neutre, l'adaptation vit dans un adaptateur par harnais**.
 
 Critère de sortie de la spec : une session Hermes voit les skills
 `softwarefactory:*` dans son catalogue de skills (`skills_list`), les
-agents du plugin y sont dispatchables, et le shim `jev-cli` reste
-opérable depuis son terminal. L'adaptateur Hermes vit dans le plugin
+agents du plugin y sont dispatchables. L'adaptateur Hermes vit dans le plugin
 sans toucher aux cœurs neutres — chantier séparé (Phase C, SF-6).

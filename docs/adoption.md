@@ -47,20 +47,19 @@ le hook `plugin-a-jour` l'applique à chaque session :
 **Le hook embarqué ne peut pas réaliser ce premier install lui-même** : il
 n'existe dans le consommateur qu'une fois le plugin installé. La ligne une
 commande (ou un install manuel) amorce ; ensuite, `plugin-a-jour` prend le
-relais à chaque démarrage ou reprise de session, et `ecrire-shims` réécrit le
-shim vers la version à jour.
+relais à chaque démarrage ou reprise de session.
 
 ## Ce que l'usine apporte au premier démarrage suivant
 
 - Skills `softwarefactory:*` et agents `softwarefactory:analyste`,
   `softwarefactory:implementeur`, `softwarefactory:relecteur`, etc.
 - Hooks génériques (mise à jour des plugins, garde `git stash`,
-  dispatch Jev, verdicts de relecture, publication des tâches natives) —
-  voir `hooks/hooks.json`.
-- Le shim `<projet>/.claude/hooks/jev-cli.mjs` (généré, ne pas éditer) :
-  `node .claude/hooks/jev-cli.mjs niveau --role …` garde un chemin stable.
-  Ajouter au settings.json du projet la permission
-  `Bash(node .claude/hooks/jev-cli.mjs:*)` pour l'appeler sans invite.
+  publication des tâches natives) — voir `hooks/hooks.json`.
+- Choix du modèle : chaque agent garde le modèle de son frontmatter ; un appel
+  au `softwarefactory:relecteur` passe `model: opus`. Jev (TypeSafe) a été
+  retiré le 2026-11-15 : un projet qui avait le shim
+  `<projet>/.claude/hooks/jev-cli.mjs` ou sa permission
+  `Bash(node .claude/hooks/jev-cli.mjs:*)` les supprime.
 
 ## Points d'attention
 
