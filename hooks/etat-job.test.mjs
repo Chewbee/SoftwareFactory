@@ -102,7 +102,7 @@ test("nom de fichier : / remplacé par - (ADR-0107)", () => {
 });
 
 test("issueDepuisNom : préfixes du dépôt reconnus, claude/<nom> et feature/ non", () => {
-  assert.equal(issueDepuisNom("feat/1967-jev-choix-modele"), 1967);
+  assert.equal(issueDepuisNom("feat/1967-choix-modele"), 1967);
   assert.equal(issueDepuisNom("recette/12-lot"), 12);
   assert.equal(issueDepuisNom("claude/stoic-curie-yag4jx"), null);
   assert.equal(issueDepuisNom("feature/12-x"), null);

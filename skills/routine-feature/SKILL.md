@@ -112,8 +112,8 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
 5. **Planifier.** Skill `superpowers-extended-cc:writing-plans`, écrite par
    l'agent principal : `docs/superpowers/plans/AAAA-MM-JJ-<sujet>.md` +
    tâches natives. Code applicatif touché : la recette utilisateur y figure
-   comme tâche `user-gate`. Niveau et modèle de chaque tâche : `jev-cli
-   niveau` si le projet l'exige (liaison noyau).
+   comme tâche `user-gate`. Chaque agent garde le modèle de son frontmatter ;
+   un appel au `softwarefactory:relecteur` passe `model: opus`.
 6. **Exécuter.** Skill `superpowers-extended-cc:subagent-driven-development`
    (agent `softwarefactory:implementeur`), chaque tâche en
    `superpowers-extended-cc:test-driven-development` : rouge cité, puis
