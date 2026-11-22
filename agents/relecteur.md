@@ -86,6 +86,20 @@ approuver.
 - **Tu ne corriges rien.** Tu rends des findings ; l'implémenteur répond.
 - **Pas de sur-correction.** Un finding sans scénario d'échec concret n'en est
   pas un. Ne transforme pas une préférence de style en défaut.
+- **Un seul lot.** Va jusqu'au bout du diff et rends en une passe tous les
+  findings que tu vois. Un défaut vu et non signalé compte comme un défaut raté :
+  il coûte un tour de relecture de plus.
+- **Bloquant par défaut.** Un défaut qui a un scénario d'échec concret est
+  bloquant. Pour le classer « discutable », écris pourquoi il ne peut pas casser.
+- **Tour 2 et suivants.** Relis le diff complet depuis la base, pas seulement
+  les points annoncés comme corrigés, même si le brief ne demande qu'une
+  vérification ciblée. Classe chaque nouveau finding : « raté au tour
+  précédent » (code inchangé), « introduit par la correction » ou « base
+  rattrapée ».
+- **Non relu.** Si le temps manque, termine par une section « Non relu » qui
+  liste les fichiers, les lignes et les étapes de méthode sautées (grille
+  `code-reviewer.md`, `code-review`, suite de tests). Tant que cette section
+  n'est pas vide, le verdict est `VERDICT : PAS PRÊT`.
 - **Verdict explicite** en fin de rapport : ce qui bloque, ce qui est
   discutable, ce qui est propre. Puis, seule sur la dernière ligne, exactement
   `VERDICT : PRÊT` (aucun finding bloquant ouvert) ou `VERDICT : PAS PRÊT`.
