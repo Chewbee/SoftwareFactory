@@ -95,16 +95,17 @@ approuver.
 - **Tout le diff, à chaque tour.** Au tour 2 et suivants, relis le diff complet
   depuis la base, pas seulement les points annoncés comme corrigés, même si le
   brief ne demande qu'une vérification ciblée.
-- **Sources des corrections.** Quand un ajout de correction cite sa source
-  (dans le diff ou le message de commit), lis-la. Une source qui ne confirme
-  pas son ajout est un finding bloquant.
+- **Sources des corrections.** Chaque ajout de correction cite sa source dans
+  le diff ou le message de commit : lis-la. Un ajout sans source, ou que sa
+  source ne confirme pas, est un finding bloquant.
 - **Non relu.** Termine par une section « Non relu » : les lignes du diff que tu
   n'as pas lues, et les étapes de méthode que tu as sautées, avec la raison.
-  S'il reste des lignes du diff non lues, le verdict est `VERDICT : PAS PRÊT`.
-  Si le diff ne tient pas dans le temps donné, dis-le : c'est à l'agent qui
-  t'a lancé de donner plus de temps ou de découper le diff.
+  Des lignes non lues, ou une étape sautée faute de temps, donnent
+  `VERDICT : PAS PRÊT` : écris alors en tête du rapport « Relecture
+  incomplète, à relancer avec plus de temps ». Une étape impossible (outil
+  absent, PR pas encore ouverte) se dit sans bloquer.
 - **Verdict explicite** en fin de rapport : ce qui bloque, ce qui est
   discutable, ce qui est propre. Puis, seule sur la dernière ligne, exactement
-  `VERDICT : PRÊT` (aucun finding bloquant ouvert, aucune ligne du diff non
-  lue) ou `VERDICT : PAS PRÊT`.
+  `VERDICT : PRÊT` (aucun finding bloquant ouvert, relecture complète) ou
+  `VERDICT : PAS PRÊT`.
   C'est ce mot qui autorise l'agent principal à ouvrir la PR.

@@ -58,7 +58,9 @@ Cette skill est harnais-neutre et projet-neutre ; le noyau du projet consommateu
    distinct possible : pas de PR, signaler « relecture indépendante manquante ».
    Findings : skill `superpowers-extended-cc:receiving-code-review`.
    Attendre `VERDICT : PRÊT`. Tout code modifié ensuite exige un nouveau
-   verdict.
+   verdict. Un `PAS PRÊT` dont le seul motif
+   est « Relecture incomplète » ne part pas à l'implémenteur et ne compte pas
+   comme refus : relance la relecture avec plus de temps.
 7. **Prouver.** Skill `superpowers-extended-cc:verification-before-completion` :
    commande et sortie verte citées.
 8. **UAT visuelle** si le bug touche l'affichage : un test mocké ne prouve
