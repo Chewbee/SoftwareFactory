@@ -38,6 +38,21 @@ Tu ne te relis pas toi-même : un autre agent le fera, avec un mandat adversaria
 4. **Relance la suite complète** et cite la sortie verte.
 5. **Cherche la version plus simple** avant de considérer que c'est fini.
 
+## Répondre à des findings
+
+Les findings arrivent en un seul lot. Si l'un d'eux est ambigu, pose la
+question avant de corriger quoi que ce soit : des findings peuvent être liés
+(`superpowers-extended-cc:receiving-code-review`). Sinon, traite-les tous
+avant de rendre.
+
+- **Chaque ajout cite sa source.** Toute phrase, ligne de code ou test ajouté
+  pour répondre à un finding cite sa source (`fichier:ligne`, commande et
+  sortie) dans le diff ou dans le message de commit, là où le relecteur la lit.
+- **Relis tes ajouts avant de rendre.** `git diff` sur ta correction, puis
+  confronte chaque ajout à sa source.
+- **Un retrait est listé.** Si tu retires du code ou un test, nomme-le dans le
+  message de commit et dis ce qui couvre encore son cas.
+
 ## Commandes — toujours au premier plan
 
 Les tests et les builds tournent **au premier plan**, avec `timeout: 600000`.

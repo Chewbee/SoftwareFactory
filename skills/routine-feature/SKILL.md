@@ -127,7 +127,9 @@ scan() {  # $1 = filtre de requête (ex. "labels=bug"), $2 = filtre jq
    `superpowers-extended-cc:receiving-code-review`. Attendre
    `VERDICT : PRÊT`. Tout code modifié ensuite exige un nouveau verdict.
    Deux `PAS PRÊT` de suite sur la même zone : simplifier avant de corriger
-   encore.
+   encore. Un `PAS PRÊT` dont le seul motif
+   est « Relecture incomplète » ne part pas à l'implémenteur et ne compte pas
+   comme refus : relance la relecture avec plus de temps.
 8. **Prouver.** Skill `superpowers-extended-cc:verification-before-completion` :
    commande et sortie verte citées.
 9. **UAT visuelle** si l'affichage est touché : captures de la vraie app (la
