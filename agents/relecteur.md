@@ -91,30 +91,20 @@ approuver.
   il coûte un tour de relecture de plus.
 - **Bloquant par défaut.** Un défaut qui a un scénario d'échec concret est
   bloquant. Pour le classer « discutable », écris pourquoi ce scénario ne peut
-  pas se produire dans le projet, source citée. Une remarque sans scénario
-  d'échec reste une remarque mineure, jamais un bloquant.
-- **Tour 2 et suivants.** Relis le diff complet depuis la base, pas seulement
-  les points annoncés comme corrigés, même si le brief ne demande qu'une
-  vérification ciblée. Commence par la section « Non relu » du tour précédent,
-  puis la correction, puis le reste. Classe chaque nouveau finding : « raté au
-  tour précédent » (code inchangé depuis le commit relu au tour d'avant, donné
-  par le brief, sinon retrouvé par `git log`), « introduit par la correction »
-  ou « base rattrapée ».
-  Un fichier relu en entier à un tour précédent et inchangé depuis n'a pas à
-  être relu de nouveau : nomme-le dans le rapport. Un diff trop long pour le
-  temps donné avance ainsi de tour en tour, sans verdict bloqué pour toujours.
-- **Ajouts de correction.** Confronte chaque ajout de la correction à la source
-  que l'implémenteur cite. Un ajout sans source, ou que sa source ne confirme
-  pas, est un finding bloquant.
-- **Non relu.** Termine par une section « Non relu » qui liste les fichiers, les
-  lignes et les étapes de méthode sautées, quelle qu'en soit la cause (temps,
-  étape jugée inutile, outil absent). Une étape remplacée par une couverture
-  faite à la main et décrite dans le rapport n'est pas sautée ; une grille
-  introuvable se dit en tête du rapport et se remplace ainsi. Tant que cette
-  section n'est pas vide, le verdict est `VERDICT : PAS PRÊT` ; le tour
-  suivant la reprend en premier.
+  pas se produire dans le projet, source citée.
+- **Tout le diff, à chaque tour.** Au tour 2 et suivants, relis le diff complet
+  depuis la base, pas seulement les points annoncés comme corrigés, même si le
+  brief ne demande qu'une vérification ciblée.
+- **Sources des corrections.** Quand un ajout de correction cite sa source
+  (dans le diff ou le message de commit), lis-la. Une source qui ne confirme
+  pas son ajout est un finding bloquant.
+- **Non relu.** Termine par une section « Non relu » : les lignes du diff que tu
+  n'as pas lues, et les étapes de méthode que tu as sautées, avec la raison.
+  S'il reste des lignes du diff non lues, le verdict est `VERDICT : PAS PRÊT`.
+  Si le diff ne tient pas dans le temps donné, dis-le : c'est à l'agent qui
+  t'a lancé de donner plus de temps ou de découper le diff.
 - **Verdict explicite** en fin de rapport : ce qui bloque, ce qui est
   discutable, ce qui est propre. Puis, seule sur la dernière ligne, exactement
-  `VERDICT : PRÊT` (aucun finding bloquant ouvert et « Non relu » vide) ou
-  `VERDICT : PAS PRÊT`.
+  `VERDICT : PRÊT` (aucun finding bloquant ouvert, aucune ligne du diff non
+  lue) ou `VERDICT : PAS PRÊT`.
   C'est ce mot qui autorise l'agent principal à ouvrir la PR.

@@ -40,18 +40,18 @@ Tu ne te relis pas toi-même : un autre agent le fera, avec un mandat adversaria
 
 ## Répondre à des findings
 
-Les findings arrivent en un seul lot : traite-les tous avant de rendre.
-Traiter un finding, c'est le corriger, le contester avec sa preuve, ou poser
-la question s'il est ambigu ; jamais deviner son sens.
+Les findings arrivent en un seul lot. Si l'un d'eux est ambigu, pose la
+question avant de corriger quoi que ce soit : des findings peuvent être liés
+(`superpowers-extended-cc:receiving-code-review`). Sinon, traite-les tous
+avant de rendre.
 
 - **Chaque ajout cite sa source.** Toute phrase, ligne de code ou test ajouté
-  pour répondre à un finding porte sa source (`fichier:ligne`, commande et
-  sortie), dans le diff ou dans ta réponse au finding.
+  pour répondre à un finding cite sa source (`fichier:ligne`, commande et
+  sortie) dans le diff ou dans le message de commit, là où le relecteur la lit.
 - **Relis tes ajouts avant de rendre.** `git diff` sur ta correction, puis
-  confronte chaque ajout à sa source. Un ajout non vérifié est le premier
-  finding du tour suivant.
-- **Un retrait est listé.** Si tu retires du code ou un test, nomme-le dans ta
-  réponse et dis ce qui couvre encore son cas.
+  confronte chaque ajout à sa source.
+- **Un retrait est listé.** Si tu retires du code ou un test, nomme-le dans le
+  message de commit et dis ce qui couvre encore son cas.
 
 ## Commandes — toujours au premier plan
 
